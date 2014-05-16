@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'c3d/version'
 
 Gem::Specification.new do |s|
-  s.name              = "C3D"
+  s.name              = "c3d"
   s.version           = VERSION
   s.platform          = Gem::Platform::RUBY
   s.summary           = "Contract Controlled Content Distribution using Ethereum Contracts to Distribute Content."
