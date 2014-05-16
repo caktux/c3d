@@ -20,8 +20,8 @@ Gem::Specification.new do |s|
   s.test_files        = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths     = ["lib"]
 
-  s.add_dependency    "httparty", "~> 0.13.1"
-  s.add_dependency    "bencode", "~> 0.8.0"
+  s.add_runtime_dependency 'httparty', '~> 0.13'
+  s.add_runtime_dependency 'bencode', '~> 0.8'
 
   s.description       = <<desc
   This gem is designed to assist in distribution mangement of content which is controlled by an Ethereum contract.
