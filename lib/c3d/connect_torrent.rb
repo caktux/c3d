@@ -1,10 +1,7 @@
 #!/usr/bin/env ruby
 # This is based off of work by fguillen for the transmission_api gem here: https://github.com/fguillen/TransmissionApi
-require 'json'
-require 'yaml'
-require 'httparty'
 
-class TransmissionApi
+class TorrentAPI
   attr_accessor :session_id
   attr_accessor :url
   attr_accessor :basic_auth
@@ -23,12 +20,13 @@ class TransmissionApi
     @url = opts[:url]
     @fields = opts[:fields] || TORRENT_FIELDS
     @basic_auth = { :username => opts[:username], :password => opts[:password] } if opts[:username]
-    @session_id = "NOT-INITIALIZED"
     @debug_mode = opts[:debug_mode] || false
+    # todo - connect to client, get, and save session_id
+    @session_id = "NOT-INITIALIZED"
   end
 
   def all
-    log ("Getting All Torrents"), true
+    log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Getting All Torrents"), true
 
     response =
       post(
@@ -42,7 +40,7 @@ class TransmissionApi
   end
 
   def find(id)
-    log ("Getting Torrent ID >> "+ "#{id}"), true
+    log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Getting Torrent ID >> "+ "#{id}"), true
 
     response =
       post(
@@ -57,7 +55,7 @@ class TransmissionApi
   end
 
   def create(filename)
-    log ("Wrote >> "+ "#{filename}"), true
+    log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Adding Blob >> \t"+ "#{filename}"), true
 
     response =
       post(
@@ -73,7 +71,7 @@ class TransmissionApi
   end
 
   def destroy(id)
-    log ("Remove Torrent ID >> "+ "#{id}"), true
+    log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Remove Torrent ID >> "+ "#{id}"), true
 
     response =
       post(
@@ -120,7 +118,7 @@ class TransmissionApi
 
     def log(message, override = false)
       if debug_mode || override
-        puts "[OWIG3::#{Time.now.strftime( "%F %T" )}] #{message}"
+        puts "#{message}"
       end
     end
 
