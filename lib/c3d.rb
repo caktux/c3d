@@ -8,9 +8,10 @@ require 'yaml'
 # Gem Dependencies
 require 'httparty'
 require 'bencode'
+require 'SocketIO'
 
 # This Gem
-require File.join(File.dirname(__FILE__), 'c3d', 'connect_ethereum')
+# require File.join(File.dirname(__FILE__), 'c3d', 'connect_ethereum')
 require File.join(File.dirname(__FILE__), 'c3d', 'connect_torrent')
 require File.join(File.dirname(__FILE__), 'c3d', 'publish')
 require File.join(File.dirname(__FILE__), 'c3d', 'subscribe')

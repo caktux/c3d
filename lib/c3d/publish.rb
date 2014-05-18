@@ -7,10 +7,6 @@ class Publish
   attr_accessor :tor_file, :blob_file, :sha1_trun
 
   def initialize blob, swarm_puller
-    # @tracker = ''
-    # @defaultdir = ""
-    # @filehashes = []
-    # @size = 0
     @piecelength = 32 * 1024
     prepare blob
     build
