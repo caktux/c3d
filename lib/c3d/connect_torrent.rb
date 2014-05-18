@@ -2,11 +2,8 @@
 # This is based off of work by fguillen for the transmission_api gem here: https://github.com/fguillen/TransmissionApi
 
 class TorrentAPI
-  attr_accessor :session_id
-  attr_accessor :url
-  attr_accessor :basic_auth
-  attr_accessor :fields
-  attr_accessor :debug_mode
+  include Celluloid::Autostart
+  attr_accessor :session_id, :url, :basic_auth, :fields, :debug_mode
 
   TORRENT_FIELDS = [
     "id",
@@ -16,7 +13,7 @@ class TorrentAPI
     "percentDone",
   ]
 
-  def initialize(opts)
+  def initialize opts
     @url = opts[:url]
     @fields = opts[:fields] || TORRENT_FIELDS
     @basic_auth = { :username => opts[:username], :password => opts[:password] } if opts[:username]
@@ -39,7 +36,7 @@ class TorrentAPI
     response["arguments"]["torrent-added"]
   end
 
-  def find(id)
+  def find id
     log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Getting Torrent ID >> "+ "#{id}"), true
 
     response =
@@ -54,7 +51,7 @@ class TorrentAPI
     response["arguments"]["torrents"].first
   end
 
-  def create(filename)
+  def create filename
     log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Adding Blob >> \t"+ "#{filename}"), true
 
     response =
