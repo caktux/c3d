@@ -11,7 +11,6 @@ QUESTION_ADDR = 'tcp://127.0.0.1:31315'
 #   * `destroy-blob`:   destroy blob (params: blob: "BLOB_ID") (returns success: true or error)
 #   * `add-blob-to-k`:  add blob to contract (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS") (returns success: true or error)
 #   * `add-blob-to-g`:  add blob to group (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-#   * `rm-blob-from-k`: remove blob from group (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS") (returns success: true or error)
 #   * `rm-blob-from-g`: remove blob from contract (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
 #   * `subscribe-k`:    add a contract's blobs to the subscribed list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
 #   * `subscribe-g`:    add a group's blobs to the subscribed list (params: contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)

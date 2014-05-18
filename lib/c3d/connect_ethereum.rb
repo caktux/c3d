@@ -3,7 +3,6 @@
 # Transactions:
 #   * `add-blob-to-k`:  add blob to contract (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS") (returns success: true or error)
 #   * `add-blob-to-g`:  add blob to group (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-#   * `rm-blob-from-k`: remove blob from group (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS") (returns success: true or error)
 #   * `rm-blob-from-g`: remove blob from contract (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
 
 class EthereumAPI
@@ -28,15 +27,6 @@ class EthereumAPI
 
   def add_blob_to_g blob_id, contract_id, group_id
     log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Adding Blob to Group >>\t#{blob_id}\t#{contract_id}\t#{group_id}"), true
-    transaction = {}
-    transaction['recipient'] = contract_id
-    transaction['data'] = #TODO
-    response = post_transaction transaction
-    response
-  end
-
-  def rm_blob_from_k blob_id, contract_id
-    log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Removing Blob from Contract >>\t#{blob_id}\t#{contract_id}"), true
     transaction = {}
     transaction['recipient'] = contract_id
     transaction['data'] = #TODO

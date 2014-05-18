@@ -3,7 +3,8 @@
 # and work by @Burgestrand here: https://gist.github.com/Burgestrand/1733611
 # note `rhash` dependency
 
-class Publish
+class PublishBlob
+  include Celluloid::Autostart
   attr_accessor :tor_file, :blob_file, :sha1_trun
 
   def initialize blob, swarm_puller
@@ -42,7 +43,7 @@ class Publish
       end
     end
 
-    def read_pieces(file, length)
+    def read_pieces file, length
       buffer = ""
       puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Hashing Blob >> \t" + "#{file.join("/")}"
       File.open(file.join("/")) do |fh|
