@@ -64,7 +64,7 @@ class TorrentAPI
         }
       )
 
-    response["arguments"]["torrent-added"]
+    response["arguments"]
   end
 
   def destroy(id)

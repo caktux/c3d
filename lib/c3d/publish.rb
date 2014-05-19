@@ -71,7 +71,11 @@ class PublishBlob
 
     def publish_torrent swarm_puller
       torrent  = swarm_puller.create @tor_file
-      @btih     = torrent['hashString']
+      begin
+        @btih     = torrent["torrent-added"]['hashString']
+      rescue
+        @btih     = torrent["torrent-duplicate"]['hashString']
+      end
       mag_link = "magnet:?xt=urn:btih:" + @btih + "&dn=" + @sha1_trun
       puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Magnet Link >> \t" + mag_link
     end
