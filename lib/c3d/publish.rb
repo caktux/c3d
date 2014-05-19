@@ -7,13 +7,14 @@ class PublishBlob
   include Celluloid
   attr_accessor :tor_file, :blob_file, :sha1_trun
 
-  def initialize blob, swarm_puller
+  def initialize blob, swarm_puller, eth_connector, sending_addr, contract_id, thread_id
     @piecelength = 32 * 1024
+    @eth = eth_connector
     prepare blob
     build
     write_torrent
     publish_torrent swarm_puller
-    publish_ethereum false, false, false
+    publish_ethereum sending_addr, contract_id, thread_id
   end
 
   private
@@ -76,13 +77,13 @@ class PublishBlob
     end
 
     def publish_ethereum sending_addr, contract_id, thread_id
-      command = {}
+      message = {}
       sending_addr ||= 'a6cb63ec28c12929bee2d3567bf98f374a0b7167'
       contract_id  ||= 'd00383d79aaede0ed34fab69e932a878e00a8938'
       thread_id    ||= '0x2A519DE3379D1192150778F9A6B1F1FFD8EF0EDAC9C91FA7E6F1853700600000'
       post_id      ||= "0x#{@btih}#{@sha1_trun}"
-      command['do_this'] = 'clientRequestsAddBlob'
-      command['params']  = [
+      message['command'] = 'c3dRequestsAddBlob'
+      message['params']  = [
         sending_addr, #senderaddr
         '',                                         #value
         contract_id,                                #recipientaddr
@@ -92,6 +93,6 @@ class PublishBlob
         thread_id,
         post_id
       ]
-      client = EthereumSocketAPI.new command
+      @eth.write JSON.dump message
     end
 end
