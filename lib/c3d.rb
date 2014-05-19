@@ -37,19 +37,19 @@ IGNORE_FILE  = File.join(SWARM_DIR, 'ignored.json')
 # todo - check dependencies are installed: zmq ... transmission
 # todo - add foreman
 
-swarm_puller = TorrentAPI.new(
+@@swarm_puller = TorrentAPI.new(
   username:   TORRENT_USER,
   password:   TORRENT_PASS,
   url:        TORRENT_RPC,
   debug_mode: true
 )
-eth = ConnectEth.new
+@@eth = ConnectEth.new
 
 if __FILE__==$0
   if ARGV[0]
     blob1 = File.read(ARGV[0]) + "\n#{Time.now}"
-    PublishBlob.new blob1, swarm_puller, eth, false, false, false
+    PublishBlob.new blob1, false, false, false
     blob2 = 'as;dlfkajfbdposdituy2q-034956712840918734uytgqklerjdnga,.fxsnvbmaz x.,c'
-    PublishBlob.new blob2, swarm_puller, eth, false, false, false
+    PublishBlob.new blob2, false, false, false
   end
 end

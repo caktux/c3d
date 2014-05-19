@@ -7,13 +7,12 @@ class PublishBlob
   include Celluloid
   attr_accessor :tor_file, :blob_file, :sha1_trun
 
-  def initialize blob, swarm_puller, eth_connector, sending_addr, contract_id, thread_id
+  def initialize blob, sending_addr, contract_id, thread_id
     @piecelength = 32 * 1024
-    @eth = eth_connector
     prepare blob
     build
     write_torrent
-    publish_torrent swarm_puller
+    publish_torrent
     publish_ethereum sending_addr, contract_id, thread_id
   end
 
@@ -69,8 +68,8 @@ class PublishBlob
       puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Torrent Link >> \t" + "#{@tor_file}"
     end
 
-    def publish_torrent swarm_puller
-      torrent  = swarm_puller.create @tor_file
+    def publish_torrent
+      torrent  = @@swarm_puller.create @tor_file
       begin
         @btih     = torrent["torrent-added"]['hashString']
       rescue
@@ -97,6 +96,6 @@ class PublishBlob
         thread_id,
         post_id
       ]
-      @eth.write JSON.dump message
+      @@eth.write JSON.dump message
     end
 end
