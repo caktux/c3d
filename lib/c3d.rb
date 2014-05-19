@@ -9,13 +9,16 @@ require 'yaml'
 require 'httparty'
 require 'bencode'
 require 'SocketIO'
+require 'celluloid/autostart'
 
 # This Gem
-# require File.join(File.dirname(__FILE__), 'c3d', 'connect_ethereum')
+require File.join(File.dirname(__FILE__), 'c3d', 'version')
+require File.join(File.dirname(__FILE__), 'c3d', 'connect_ethereum_sockets')
 require File.join(File.dirname(__FILE__), 'c3d', 'connect_torrent')
+# require File.join(File.dirname(__FILE__), 'c3d', 'connect_ui')
 require File.join(File.dirname(__FILE__), 'c3d', 'publish')
 require File.join(File.dirname(__FILE__), 'c3d', 'subscribe')
-require File.join(File.dirname(__FILE__), 'c3d', 'version')
+require File.join(File.dirname(__FILE__), 'c3d', 'get')
 
 # todo - load these variables from a config file in ~/.epm
 SWARM_DIR    = File.join(ENV['HOME'], '.cache', 'c3d')
@@ -24,6 +27,9 @@ BLOBS_DIR    = File.join(SWARM_DIR, 'blobs')
 TORRENT_RPC  = "http://127.0.0.1:9091/transmission/rpc"
 TORRENT_USER = 'username'
 TORRENT_PASS = 'password'
+ETHEREUM_RPC = 'http://localhost:8080'
+WATCH_FILE   = File.join(SWARM_DIR, 'watchers.json')
+IGNORE_FILE  = File.join(SWARM_DIR, 'ignored.json')
 
 # todo - check swarm directories exist
 # todo - check that torrent manager is running
@@ -38,7 +44,7 @@ swarm_puller = TorrentAPI.new(
 )
 
 blob = File.read(ARGV[0]) + "\n#{Time.now}"
-blob = Publish.new blob, swarm_puller
+blob = PublishBlob.new blob, swarm_puller
 
 # added = swarm_puller.create("#{t.magnet_link}")
 
