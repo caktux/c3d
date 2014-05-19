@@ -1,15 +1,11 @@
 #!/usr/bin/env ruby
 
-require 'celluloid/zmq'
 require 'json'
-
-ANSWER_ADDR   = 'tcp://127.0.0.1:31314'
-QUESTION_ADDR = 'tcp://127.0.0.1:31315'
+require 'celluloid/zmq'
 
 # commands - sent over ZMQ but using a standard JSONRPC structure.
 #   * `make-blob`:      make blob (params: filename: "FILENAME" || filecontents: "CONTENTS") (returns success: BLOB_ID or error)
 #   * `destroy-blob`:   destroy blob (params: blob: "BLOB_ID") (returns success: true or error)
-#   * `add-blob-to-k`:  add blob to contract (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS") (returns success: true or error)
 #   * `add-blob-to-g`:  add blob to group (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
 #   * `rm-blob-from-g`: remove blob from contract (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
 #   * `subscribe-k`:    add a contract's blobs to the subscribed list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
@@ -27,45 +23,30 @@ class ConnectUI
 
   def initialize
     @answer_socket = RepSocket.new
-    @question_socket = ReqSocket.new
-    @counter = 0
-    @messages = 0
 
     begin
-      @answer_socket.bind(ANSWER_ADDR)
-      @question_socket.bind(QUESTION_ADDR)
+      @answer_socket.bind UI_ADDRESS
     rescue IOError
       @answer_socket.close
-      @question_socket.close
       raise
     end
 
-    puts "Starting CACHE_master Responder on port: #{ANSWER_ADDR.split(':').last} and pid: #{Process.pid}."
-    puts "Starting CACHE_master Questioner on port: #{QUESTION_ADDR.split(':').last} and pid: #{Process.pid}."
+    puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] c3D<-ui on port >>\t#{UI_ADDRESS.split(':').last}"
   end
 
   def run
-    guard = true
-    while guard == true
-      guard = handle_message @answer_socket.read
-    end
-    @answer_socket.close
+    loop { async.handle_message @answer_socket.read }
     self.terminate
   end
 
-  def handle_message(message)
-    unless message == 'SHUTDOWN'
-      @messages += 1
-      message = JSON.load(message)
-      @counter += message['val']
-      message['val'] = @counter / @messages
-      message['origin'] = "ruby.#{Process.pid}"
-      @answer_socket.send(JSON.dump(message))
-      true
-    else
-      false
-    end
+  def handle_message message
+    message = JSON.load message
+    @answer_socket.send(JSON.dump(message))
   end
 end
 
-ConnectUI.new.run
+if __FILE__==$0
+  UI_ADDRESS   = 'tcp://127.0.0.1:31314'
+  answers_for_eth  = ConnectUI.new
+  answers_for_eth.async.run
+end
