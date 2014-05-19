@@ -22,9 +22,8 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'httparty', '~> 0.13'
   s.add_runtime_dependency 'bencode', '~> 0.8'
-  s.add_runtime_dependency 'celluloid', '~> 0.16'
+  s.add_runtime_dependency 'celluloid', '~> 0.15'
   s.add_runtime_dependency 'celluloid-zmq', '~> 0.15'
-  s.add_runtime_dependency 'socketio-client'
 
   s.description       = <<desc
   This gem is designed to assist in distribution mangement of content which is controlled by an Ethereum contract.
