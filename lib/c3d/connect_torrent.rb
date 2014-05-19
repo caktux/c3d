@@ -2,7 +2,7 @@
 # This is based off of work by fguillen for the transmission_api gem here: https://github.com/fguillen/TransmissionApi
 
 class TorrentAPI
-  include Celluloid::Autostart
+  include Celluloid
   attr_accessor :session_id, :url, :basic_auth, :fields, :debug_mode
 
   TORRENT_FIELDS = [

@@ -4,7 +4,7 @@
 # note `rhash` dependency
 
 class PublishBlob
-  include Celluloid::Autostart
+  include Celluloid
   attr_accessor :tor_file, :blob_file, :sha1_trun
 
   def initialize blob, swarm_puller
@@ -13,6 +13,7 @@ class PublishBlob
     build
     write_torrent
     publish_torrent swarm_puller
+    publish_ethereum false, false, false
   end
 
   private
@@ -69,8 +70,28 @@ class PublishBlob
 
     def publish_torrent swarm_puller
       torrent  = swarm_puller.create @tor_file
-      btih     = torrent['hashString']
-      mag_link = "magnet:?xt=urn:btih:" + btih + "&dn=" + @sha1_trun
+      @btih     = torrent['hashString']
+      mag_link = "magnet:?xt=urn:btih:" + @btih + "&dn=" + @sha1_trun
       puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Magnet Link >> \t" + mag_link
+    end
+
+    def publish_ethereum sending_addr, contract_id, thread_id
+      command = {}
+      sending_addr ||= 'a6cb63ec28c12929bee2d3567bf98f374a0b7167'
+      contract_id  ||= 'd00383d79aaede0ed34fab69e932a878e00a8938'
+      thread_id    ||= '0x2A519DE3379D1192150778F9A6B1F1FFD8EF0EDAC9C91FA7E6F1853700600000'
+      post_id      ||= "0x#{@btih}#{@sha1_trun}"
+      command['do_this'] = 'clientRequestsAddBlob'
+      command['params']  = [
+        sending_addr, #senderaddr
+        '',                                         #value
+        contract_id,                                #recipientaddr
+        '10000',                                    #gas
+        '3',                                        #dataslots
+        'newp',                                     #....data
+        thread_id,
+        post_id
+      ]
+      client = EthereumSocketAPI.new command
     end
 end

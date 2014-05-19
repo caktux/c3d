@@ -1,115 +1,46 @@
 #!/usr/bin/env ruby
 
 # Transactions:
-#   * `add-blob-to-k`:  add blob to contract (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS") (returns success: true or error)
 #   * `add-blob-to-g`:  add blob to group (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
 #   * `rm-blob-from-g`: remove blob from contract (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
 
-class EthereumAPI
-  include Celluloid::Autostart
-  attr_accessor :session_id, :url, :basic_auth, :debug_mode
+require 'SocketIO'
+require 'celluloid/autostart'
 
-  def initialize opts
-    @url = opts[:url]
-    #@basic_auth = { :username => opts[:username], :password => opts[:password] } if opts[:username]
-    @debug_mode = opts[:debug_mode] || false
-  end
+class EthereumSocketAPI
+  include Celluloid
 
-
-  def add_blob_to_k blob_id, contract_id
-    log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Adding Blob to Contract >>\t#{blob_id}\t#{contract_id}"), true
-    transaction = {}
-    transaction['recipient'] = contract_id
-    transaction['data'] = #TODO
-    response = post_transaction transaction
-    response
-  end
-
-  def add_blob_to_g blob_id, contract_id, group_id
-    log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Adding Blob to Group >>\t#{blob_id}\t#{contract_id}\t#{group_id}"), true
-    transaction = {}
-    transaction['recipient'] = contract_id
-    transaction['data'] = #TODO
-    response = post_transaction transaction
-    response
-  end
-
-  def rm_blob_from_g blob_id, contract_id, group_id
-    log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Removing Blob from Group >>\t#{blob_id}\t#{contract_id}\t#{group_id}"), true
-    transaction = {}
-    transaction['recipient'] = contract_id
-    transaction['data'] = #TODO
-    response = post_transaction transaction
-    response
-  end
-
-
-
-  private
-    def post_transaction transaction
-      transaction['value'] = '0'
-      transaction['gas'] = '1500'
-      transaction['gasprice'] = '100000'
-      JSON::parse( http_post( method: "transact", arguments: transaction ).body )
-    end
-
-    def
-
-    def http_post opts
-      post_options = {
-        :body => opts.to_json,
-        :headers => { "session-id" => session_id }
-      }
-      post_options.merge!( :basic_auth => basic_auth ) if basic_auth
-
-      log "url: #{url}"
-      log "post_body:"
-      log JSON.parse(post_options[:body]).to_yaml
-      log "------------------"
-
-      response = HTTParty.post( url, post_options )
-
-      log_response response
-
-      # retry connection if session_id incorrect
-      if( response.code == 409 )
-        log "changing session_id"
-        @session_id = response.headers["session-id"]
-        response = http_post(opts)
+  def initialize command={}
+    do_this = command['do_this']
+    params  = command['params']
+    client  = SocketIO.connect("http://localhost:31313", sync: true) do
+      before_start do
+        on_message {|message| puts message}
+        on_json_message {|message| puts message}
+        on_event('clientRequestsAddresses') {|message| puts message }
+        on_disconnect {puts "I GOT A DISCONNECT"}
       end
 
-      response
-    end
-
-    def log(message, override = false)
-      if debug_mode || override
-        puts "#{message}"
+      after_start do
+        emit do_this, params
+        emit 'clientRequestsAddresses', ''
       end
     end
+  end
+end
 
-    def log_response(response)
-      body = nil
-      begin
-        body = JSON.parse(response.body).to_yaml
-      rescue
-        body = response.body
-      end
-
-      headers = response.headers.to_yaml
-
-      log "response.code: #{response.code}"
-      log "response.message: #{response.message}"
-
-      log "response.body_raw:"
-      log response.body
-      log "-----------------"
-
-      log "response.body:"
-      log body
-      log "-----------------"
-
-      log "response.headers:"
-      log headers
-      log "------------------"
-    end
+if __FILE__==$0
+  command = {}
+  command['do_this'] = 'clientRequestsAddBlob'
+  command['params']  = [
+    'a6cb63ec28c12929bee2d3567bf98f374a0b7167', #senderaddr
+    '',                                         #value
+    'd00383d79aaede0ed34fab69e932a878e00a8938', #recipientaddr
+    '10000',                                    #gas
+    '3',                                        #dataslots
+    'newp',                                     #....data
+    '0x2A519DE3379D1192150778F9A6B1F1FFD8EF0EDAC9C91FA7E6F1853700600000',
+    '0x1d822cb2e4c60c3a8a85546304072b14fb9de94e2c0c608c4120b5d529590c9d'
+  ]
+  client = EthereumSocketAPI.new command
 end
