@@ -7,13 +7,17 @@ class PublishBlob
   include Celluloid
   attr_accessor :tor_file, :blob_file, :sha1_trun
 
-  def initialize blob, sending_addr, contract_id, thread_id
+  def initialize blob, sending_addr, contract_id='', group_id=''
     @piecelength = 32 * 1024
-    prepare blob
-    build
-    write_torrent
-    publish_torrent
-    publish_ethereum sending_addr, contract_id, thread_id
+    unless blob == nil
+      prepare blob
+      build
+      write_torrent
+      publish_torrent
+    end
+    unless sending_addr == nil
+      publish_ethereum sending_addr, contract_id, group_id
+    end
   end
 
   private
@@ -79,23 +83,21 @@ class PublishBlob
       puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Magnet Link >> \t" + mag_link
     end
 
-    def publish_ethereum sending_addr, contract_id, thread_id
+    def publish_ethereum sending_addr, contract_id, group_id
       message = {}
-      sending_addr ||= 'a6cb63ec28c12929bee2d3567bf98f374a0b7167'
-      contract_id  ||= 'd00383d79aaede0ed34fab69e932a878e00a8938'
-      thread_id    ||= '0x2A519DE3379D1192150778F9A6B1F1FFD8EF0EDAC9C91FA7E6F1853700600000'
-      post_id      ||= "0x#{@btih}#{@sha1_trun}"
+      post_id = "0x#{@btih}#{@sha1_trun}"
       message['command'] = 'c3dRequestsAddBlob'
       message['params']  = [
-        sending_addr, #senderaddr
-        '',                                         #value
-        contract_id,                                #recipientaddr
-        '10000',                                    #gas
-        '3',                                        #dataslots
-        'newp',                                     #....data
-        thread_id,
+        sending_addr,    #sender_addr
+        '',              #value
+        contract_id,     #recipient_addr
+        '10000',         #gas
+        '3',             #data_slots
+        'newp',          #....data
+        group_id,
         post_id
       ]
       @@eth.write JSON.dump message
     end
 end
+
