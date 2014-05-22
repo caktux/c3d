@@ -31,6 +31,12 @@ c3dSocket.bind(c3dAddress, function(err) {
           respond(response,c3dSocket);
         });
 
+      } else if ( question.command == 'c3dRequestsAddGroup' ) {
+        ethBridgeSocket.emit('transact');
+        ethBridgeSocket.on('transactResponse', function(response) {
+          respond(response,c3dSocket);
+        });
+
       } else if ( question.command == 'c3dRequestsAddresses' ) {
         ethBridgeSocket.emit('getAddresses');
         ethBridgeSocket.on('getAddressesResponse', function(response) {
@@ -46,6 +52,9 @@ c3dSocket.bind(c3dAddress, function(err) {
     });
   });
 });
+
+// todo == dirty hack for when multiple tx are sent... need to be ~1s apart.
+// todo == debug why the new 'newt' is not working.
 
 var respond = function(response, c3dSocket) {
   if(dirtyHack == 1) {
