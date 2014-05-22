@@ -108,7 +108,9 @@ class Subscriber
 
     def do_i_have_it? blob
       dn   = blob[42..-1]
-      File.exists?(File.join(BLOBS_DIR, dn))
+      if dn
+        File.exists?(File.join(BLOBS_DIR, dn))
+      end
     end
 
     def get_the_blob blob
@@ -137,7 +139,7 @@ if __FILE__==$0
     debug_mode: false
   )
   ETH_ADDRESS  = 'tcp://127.0.0.1:31315'
-  '38155ef3698a43b24b054d816a8a5f79fc148623'
+  '4320838ed6aff9ad8df45e261780af69e7c599ba'
   '0xD4C592AD47DF267F41D6083533935818BFE74849BAE86F872ABE2A778200000'
   questions_for_eth = ConnectEth.new
   Subscriber.new 'assembleQueries', questions_for_eth
