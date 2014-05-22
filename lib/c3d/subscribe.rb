@@ -37,8 +37,8 @@ class Subscriber
     watched, ignored = load_library
     # watched[contract] = [group1,group2] || watched[contract]=[] <=all
     watched.each_key do |contract|
+      # todo - build
       latest_group = send_query contract, '0x18'
-      # sleep 0.5
       latest_group_author = send_query contract, latest_group
       step = iterate latest_group
       prev_group = send_query contract, step      # prev_group == '0x16' => first_group
@@ -63,12 +63,12 @@ class Subscriber
       p latest_blob
       next_blob = ''
       until next_blob == '0x'
-        next_blob = send_query contract, latest_blob
+        next_blob          = send_query contract, latest_blob
         latest_blob_author = latest_blob.next
-        blob_id = send_query contract, latest_blob.next.next
+        blob_id            = send_query contract, latest_blob.next.next
         p next_blob
         p latest_blob_author
-        p blob_id
+        get_the_blob blob_id unless do_i_have_it? blob_id
         latest_blob = next_blob
       end
     end
@@ -105,13 +105,37 @@ class Subscriber
       input[-1] = last_place.next
       input
     end
+
+    def do_i_have_it? blob
+      dn   = blob[42..-1]
+      File.exists?(File.join(BLOBS_DIR, dn))
+    end
+
+    def get_the_blob blob
+      btih = blob[2..41]
+      dn   = blob[42..-1]
+      link = "magnet:?xt=urn:btih:" + btih + "&dn=" + dn
+      p link
+      # torrent  = @@swarm_puller.create blob
+    end
 end
 
 if __FILE__==$0
   require './connect_ethereum.rb'
+  require './connect_torrent'
   SWARM_DIR    = File.join(ENV['HOME'], '.cache', 'c3d')
+  BLOBS_DIR    = File.join(SWARM_DIR, 'blobs')
   WATCH_FILE   = File.join(SWARM_DIR, 'watchers.json')
   IGNORE_FILE  = File.join(SWARM_DIR, 'ignored.json')
+  TORRENT_RPC  = 'http://127.0.0.1:9091/transmission/rpc'
+  TORRENT_USER = 'username'
+  TORRENT_PASS = 'password'
+  @@swarm_puller = TorrentAPI.new(
+    username:   TORRENT_USER,
+    password:   TORRENT_PASS,
+    url:        TORRENT_RPC,
+    debug_mode: false
+  )
   ETH_ADDRESS  = 'tcp://127.0.0.1:31315'
   '4320838ed6aff9ad8df45e261780af69e7c599ba'
   '0x76A46EAB30845C1FA2C0E08243890CDFBF73D6421CFA5BF9169FFB98A3300000'
