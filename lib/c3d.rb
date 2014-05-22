@@ -4,6 +4,7 @@
 require 'digest/sha1'
 require 'json'
 require 'yaml'
+require 'base64'
 
 # Gem Dependencies
 require 'httparty'
@@ -17,6 +18,7 @@ require File.join(File.dirname(__FILE__), 'c3d', 'connect_torrent')
 require File.join(File.dirname(__FILE__), 'c3d', 'connect_ui')
 require File.join(File.dirname(__FILE__), 'c3d', 'publish')
 require File.join(File.dirname(__FILE__), 'c3d', 'subscribe')
+require File.join(File.dirname(__FILE__), 'c3d', 'util')
 require File.join(File.dirname(__FILE__), 'c3d', 'get')
 
 # todo - load these variables from a config file in ~/.epm
@@ -49,11 +51,12 @@ IGNORE_FILE  = File.join(SWARM_DIR, 'ignored.json')
 @@ui.async.run
 
 if __FILE__==$0
-  if ARGV[0]
+  # if ARGV[0]
     blob1 = File.read(ARGV[0]) + "\n#{Time.now}"
-    PublishBlob.new blob1, 'a6cb63ec28c12929bee2d3567bf98f374a0b7167', 'd00383d79aaede0ed34fab69e932a878e00a8938',  '0x2A519DE3379D1192150778F9A6B1F1FFD8EF0EDAC9C91FA7E6F1853700600000'
+    PublishBlob.new blob1, 'a6cb63ec28c12929bee2d3567bf98f374a0b7167', '4320838ed6aff9ad8df45e261780af69e7c599ba',  '0x35B6FD4E17C1FD21937CDD43B0EA84FF0265A3C7DD3BB34142353A5D4CE00000'
     blob2 = 'as;dlfkajfbdposdituy2q-034956712840918734uytgqklerjdnga,.fxsnvbmaz x.,c'
-    PublishBlob.new blob2, 'a6cb63ec28c12929bee2d3567bf98f374a0b7167', 'd00383d79aaede0ed34fab69e932a878e00a8938',  '0x2A519DE3379D1192150778F9A6B1F1FFD8EF0EDAC9C91FA7E6F1853700600000'
-    # PublishBlob.new blob2, nil
-  end
+    PublishBlob.new blob2, 'a6cb63ec28c12929bee2d3567bf98f374a0b7167', '4320838ed6aff9ad8df45e261780af69e7c599ba',  '0x35B6FD4E17C1FD21937CDD43B0EA84FF0265A3C7DD3BB34142353A5D4CE00000'
+    # Utility.add_group_to_ethereum '0xa6cb63ec28c12929bee2d3567bf98f374a0b7167', '4320838ed6aff9ad8df45e261780af69e7c599ba', 'ThISisIt', @@eth
+    PublishBlob.new blob2, nil
+  # end
 end
