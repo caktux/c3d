@@ -4,17 +4,40 @@ require 'json'
 require 'celluloid/zmq'
 
 # commands - sent over ZMQ but using a standard JSONRPC structure.
-#   * `makeBlob`:      make blob (params: filename: "FILENAME" || filecontents: "CONTENTS") (returns success: BLOB_ID or error)
-#   * `destroyBlob`:   destroy blob (params: blob: "BLOB_ID") (returns success: true or error)
-#   * `addBlobToG`:  add blob to group (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-#   * `rmBlobFromG`: remove blob from contract (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-#   * `subscribeK`:    add a contract's blobs to the subscribed list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
-#   * `subscribeG`:    add a group's blobs to the subscribed list (params: contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-#   * `unsubscribeK`   remove a contract's blobs from the subscribed list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
-#   * `unsubscribeG`   remove a group's blobs from the subscribed list (params: contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-#   * `ignoreG`        add a group to the ignore list (params: contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-#   * `publish`:        sugar for make blob + add to k + (opt) add to g (params: filename: "FILENAME" || filecontents: "CONTENTS", contract: "CONTRACT_ADDRESS", [optional] group: ["GROUP1_ID", "GROUP2_ID", ...]) (returns success: BLOB_ID or error)
-#   * `get`:            add a magnet link to the cache (params: id: "BLOB_ID") (returns success: true or error)
+#   * `makeBlob`:      make blob
+#                      params: filename: "FILENAME" || filecontents: "CONTENTS"
+#                      returns success: BLOB_ID or error
+#   * `destroyBlob`:   destroy blob
+#                      params: blob: "BLOB_ID"
+#                      returns success: true or error
+#   * `addBlobToG`:    add blob to group
+#                      params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID"
+#                      returns success: true or error
+#   * `rmBlobFromG`:   remove blob from contract
+#                      params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID"
+#                      returns success: true or error
+#   * `subscribeK`:    add a contract's blobs to the subscribed list
+#                      params: contract: "CONTRACT_ADDRESS"
+#                      returns success: true or error
+#   * `subscribeG`:    add a group's blobs to the subscribed list
+#                      params: contract: "CONTRACT_ADDRESS", group: "GROUP_ID"
+#                      returns success: true or error
+#   * `unsubscribeK`   remove a contract's blobs from the subscribed list
+#                      params: contract: "CONTRACT_ADDRESS"
+#                      returns success: true or error
+#   * `unsubscribeG`   remove a group's blobs from the subscribed list
+#                      params: contract: "CONTRACT_ADDRESS", group: "GROUP_ID"
+#                      returns success: true or error
+#   * `ignoreG`        add a group to the ignore list
+#                      params: contract: "CONTRACT_ADDRESS", group: "GROUP_ID"
+#                      returns success: true or error
+#   * `publish`:       sugar for make blob + add to g
+#                      params: filename: "FILENAME" || filecontents: "CONTENTS",
+#                              contract: "CONTRACT_ADDRESS", [group]: ["GROUP1_ID", "GROUP2_ID", ...]
+#                      returns success: BLOB_ID or error)
+#   * `get`:           add a magnet link to the cache
+#                      params: id: "BLOB_ID"
+#                      returns success: true or error
 
 Celluloid::ZMQ.init
 
