@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    c3d (0.2.0)
+    c3d (0.3.0)
       bencode (~> 0.8)
       celluloid (~> 0.15)
       celluloid-zmq (~> 0.15)
