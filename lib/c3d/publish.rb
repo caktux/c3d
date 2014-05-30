@@ -86,18 +86,13 @@ class PublishBlob
     def publish_ethereum sending_addr, contract_id, group_id
       message = {}
       post_id = "0x#{@btih}#{@sha1_trun}"
-      message['command'] = 'c3dRequestsAddBlob'
-      message['params']  = [
-        sending_addr,    #sender_addr
-        '',              #value
-        contract_id,     #recipient_addr
-        '10000',         #gas
+      data  = [
         '3',             #data_slots
         'newp',          #....data
         group_id,
         post_id
       ]
-      @@eth.write JSON.dump message
+      @@eth.transact contract_id, sending_addr, data
     end
 end
 

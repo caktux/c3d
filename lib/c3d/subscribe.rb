@@ -34,8 +34,9 @@ class Subscriber
   end
 
   def assemble_queries
-    watched, ignored = load_library
+    # watched, ignored = load_library
     # watched[contract] = [group1,group2] || watched[contract]=[] <=all
+    watched = {"97d1f086800920e8fd2344be52fb22d7bf6036d2" => []}
     watched.each_key do |contract|
       # todo - build
       latest_group = send_query contract, '0x18'
@@ -64,7 +65,7 @@ class Subscriber
       next_blob = ''
       until next_blob == '0x'
         next_blob          = send_query contract, latest_blob
-        latest_blob_author = latest_blob.next
+        latest_blob_author = send_query contract, latest_blob.next
         blob_id            = send_query contract, latest_blob.next.next
         p next_blob
         p latest_blob_author
@@ -92,8 +93,7 @@ class Subscriber
     end
 
     def send_query contract, storage
-      message = { 'command' => 'c3dRequestsStorage', 'params' => [ contract, storage ] }
-      @eth.write JSON.dump message
+      @eth.get_storage_at contract, storage
     end
 
     def eth_strings input
@@ -108,23 +108,25 @@ class Subscriber
 
     def do_i_have_it? blob
       dn   = blob[42..-1]
-      if dn
-        File.exists?(File.join(BLOBS_DIR, dn))
-      end
+      p 'dont have this'
+      File.exists?(File.join(BLOBS_DIR, dn))
     end
 
     def get_the_blob blob
       btih = blob[2..41]
       dn   = blob[42..-1]
       link = "magnet:?xt=urn:btih:" + btih + "&dn=" + dn
-      p link
-      # torrent  = @@swarm_puller.create blob
+      p 'getting_link'
+      torrent  = @@swarm_puller.create link
+      p torrent
     end
 end
 
 if __FILE__==$0
   require './connect_ethereum.rb'
   require './connect_torrent'
+  require 'yaml'
+  require 'httparty'
   SWARM_DIR    = File.join(ENV['HOME'], '.cache', 'c3d')
   BLOBS_DIR    = File.join(SWARM_DIR, 'blobs')
   WATCH_FILE   = File.join(SWARM_DIR, 'watchers.json')
@@ -136,12 +138,12 @@ if __FILE__==$0
     username:   TORRENT_USER,
     password:   TORRENT_PASS,
     url:        TORRENT_RPC,
-    debug_mode: false
+    debug_mode: true
   )
   ETH_ADDRESS  = 'tcp://127.0.0.1:31315'
   '4320838ed6aff9ad8df45e261780af69e7c599ba'
   '0xD4C592AD47DF267F41D6083533935818BFE74849BAE86F872ABE2A778200000'
-  questions_for_eth = ConnectEth.new
+  questions_for_eth = ConnectEthZMQ.new :socket
   Subscriber.new 'assembleQueries', questions_for_eth
 end
 
