@@ -7,7 +7,7 @@
   "torrent_user": "username",
   "torrent_pass": "password",
   "ui_address": "tcp://127.0.0.1:31314",
-  "eth_connector": "zmq",
+  "eth_connector": "rpc",
   "eth_zmq_addr": "tcp://127.0.0.1:31315",
   "eth_rpc_host": "localhost",
   "eth_rpc_port": "9090",

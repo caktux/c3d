@@ -7,7 +7,7 @@ class Publish
   attr_accessor :tor_file, :blob_file, :sha1_trun
 
   def initialize puller, eth, blob, sending_addr, contract_id='', group_id=''
-    @swarm_puller = puller
+    @puller = puller
     @eth = eth
     @piecelength = 32 * 1024
 
@@ -75,7 +75,7 @@ class Publish
     end
 
     def publish_torrent
-      torrent  = @swarm_puller.create @tor_file
+      torrent  = @puller.create @tor_file
       begin
         @btih     = torrent["torrent-added"]['hashString']
       rescue

@@ -14,7 +14,7 @@ require 'celluloid/autostart'
 # This Gem
 Dir[File.dirname(__FILE__) + '/c3d/*.rb'].each {|file| require file }
 
-SetupC3D.new
+SetupC3D.new 'rpc'
 
 TorrentAPI.supervise_as :puller, {
     username: ENV['TORRENT_USER'],
