@@ -11,10 +11,10 @@ class SetupC3D
     set_the_env config
     set_trans_config config
     set_c3d_config config
-    TransmissionRunner.start_transmission
-    EthZmqRunner.start_ethereum_zmq_bridge if ENV['ETH_CONNECTOR'] == 'zmq'
-    sleep 2
+    start_processes socket
   end
+
+  private
 
   def set_deps
     dep_exist? 'transmission-daemon', 'sudo apt-get install transmission-daemon'
@@ -71,6 +71,12 @@ class SetupC3D
     dir_exist?  config['download_dir']
     file_exist? ENV['WATCH_FILE']
     file_exist? ENV['IGNORE_FILE']
+  end
+
+  def start_processes socket
+    TransmissionRunner.start_transmission
+    EthZmqRunner.start_ethereum_zmq_bridge if ( ENV['ETH_CONNECTOR'] == 'zmq' || socket == 'zmq' )
+    sleep 2
   end
 
   def dir_exist? directry
