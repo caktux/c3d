@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
-class TransmissionRunner
+module TransmissionRunner
+  extend self
   def start_transmission
     unless is_trans_running?
       pid = spawn "transmission-daemon -f --no-incomplete-dir -o -C -p #{ENV['TORRENT_RPC'].split(':').last[0..3]} -w #{ENV['BLOBS_DIR']} -g #{File.join(ENV['HOME'], '.epm')}"
@@ -14,7 +15,9 @@ class TransmissionRunner
   end
 end
 
-class EthZmqRunner
+module EthZmqRunner
+  extend self
+
   def start_ethereum_zmq_bridge
     unless is_bridge_running?
       c3d_node = File.join(File.dirname(__FILE__), '..', '..', 'node_modules', 'c3d', 'connect_aleth.js')
@@ -29,7 +32,9 @@ class EthZmqRunner
   end
 end
 
-class EthRunner
+module EthRunner
+  extend self
+
   def start_ethereum
     unless is_eth_running?
       pid = spawn #{todo}""
