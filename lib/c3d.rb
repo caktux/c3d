@@ -23,8 +23,8 @@ TorrentAPI.supervise_as :puller, {
 @puller = Celluloid::Actor[:puller]
 
 @eth = ConnectEthZMQ.new
-# @ui  = ConnectUI.new
-# @ui.async.run
+@ui  = ConnectUI.new @puller, @eth
+@ui.async.run
 
 if __FILE__==$0
   blob1 = File.read(ARGV[0]) + "\n#{Time.now}"
