@@ -12,51 +12,24 @@ require 'bencode'
 require 'celluloid/autostart'
 
 # This Gem
-require File.join(File.dirname(__FILE__), 'c3d', 'version')
-require File.join(File.dirname(__FILE__), 'c3d', 'connect_ethereum')
-require File.join(File.dirname(__FILE__), 'c3d', 'connect_torrent')
-require File.join(File.dirname(__FILE__), 'c3d', 'connect_ui')
-require File.join(File.dirname(__FILE__), 'c3d', 'publish')
-require File.join(File.dirname(__FILE__), 'c3d', 'subscribe')
-require File.join(File.dirname(__FILE__), 'c3d', 'util')
-require File.join(File.dirname(__FILE__), 'c3d', 'get')
+Dir[File.dirname(__FILE__) + '/c3d/*.rb'].each {|file| require file }
 
-# todo - load these variables from a config file in ~/.epm
-SWARM_DIR    = File.join(ENV['HOME'], '.cache', 'c3d')
-TORRENTS_DIR = File.join(SWARM_DIR, 'torrents')
-BLOBS_DIR    = File.join(SWARM_DIR, 'blobs')
-TORRENT_RPC  = 'http://127.0.0.1:9091/transmission/rpc'
-TORRENT_USER = 'username'
-TORRENT_PASS = 'password'
-ETH_ADDRESS  = 'tcp://127.0.0.1:31315'
-UI_ADDRESS   = 'tcp://127.0.0.1:31314'
-WATCH_FILE   = File.join(SWARM_DIR, 'watchers.json')
-IGNORE_FILE  = File.join(SWARM_DIR, 'ignored.json')
+SetupC3D.new
 
-# todo - check that torrent manager is running
-# todo - torrentapis use a 'fairly std' rpc framework, but with different
-#          endpoints. need to test these though
-# todo - check dependencies are installed: zmq ... transmission
-# todo - add foreman
-# todo - trap transmission not running errors
+TransmissionRunner.new.start_transmission
+sleep 5
 
-@@swarm_puller = TorrentAPI.new(
-  username:   TORRENT_USER,
-  password:   TORRENT_PASS,
-  url:        TORRENT_RPC,
-  debug_mode: false
-)
-@@eth = ConnectEth.new
-@@ui  = ConnectUI.new
-@@ui.async.run
+TorrentAPI.supervise_as :puller, {
+  username: ENV['TORRENT_USER'],
+  password: ENV['TORRENT_PASS'],
+  url: ENV['TORRENT_RPC'] }
+@swarm_puller = Celluloid::Actor[:puller]
+
+@eth = ConnectEthZMQ.new #:zmq, :cpp
+# @ui  = ConnectUI.new
+# @ui.async.run
 
 if __FILE__==$0
-  # if ARGV[0]
-    blob1 = File.read(ARGV[0]) + "\n#{Time.now}"
-    PublishBlob.new blob1, '38155ef3698a43b24b054d816a8a5f79fc148623', '71e08d9f82414efd9023a4040eec8f927ff32fd8',  '0x73FAC42E61AD7BDC6A77E31157996748DE86E9AD6FCC0C18C8720DCFBA100000'
-    blob2 = 'as;dlfkajfbdposdituy2q-034956712840918734uytgqklerjdnga,.fxsnvbmaz x.,c'
-    PublishBlob.new blob2, '38155ef3698a43b24b054d816a8a5f79fc148623', '71e08d9f82414efd9023a4040eec8f927ff32fd8',  '0x73FAC42E61AD7BDC6A77E31157996748DE86E9AD6FCC0C18C8720DCFBA100000'
-    # Utility.add_group_to_ethereum '0xa6cb63ec28c12929bee2d3567bf98f374a0b7167', '4320838ed6aff9ad8df45e261780af69e7c599ba', 'ThISisIt', @@eth
-    PublishBlob.new blob2, nil
-  # end
+  blob1 = File.read(ARGV[0]) + "\n#{Time.now}"
+  Publish.new @swarm_puller, @eth, blob1, 'a6cb63ec28c12929bee2d3567bf98f374a0b7167', '97d1f086800920e8fd2344be52fb22d7bf6036d2',  '0x2E737671893D33BF53A5F00EDE9E839F9D86E3A391387CA9189CA79729D00000'
 end
