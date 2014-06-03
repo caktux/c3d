@@ -15,11 +15,11 @@ class ConnectEthZMQ
   def initialize
     @question_socket = ReqSocket.new
     begin
-      @question_socket.connect ETH_ZMQ_ADDR
+      @question_socket.connect ENV['ETH_ZMQ_ADDR']
     rescue IOError
       @question_socket.close
     end
-    puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] c3D->eth via ZMQ and JS Socket on port >>\t#{ETH_ZMQ_ADDR.split(':').last}"
+    puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] c3D->eth via ZMQ and JS Socket on port >>\t#{ENV['ETH_ZMQ_ADDR'].split(':').last}"
   end
 
   def get_storage_at address, storage_location
@@ -82,7 +82,7 @@ class ConnectEthZMQ
 
     def send_message request
       puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Sending Question >>\t#{request}"
-      @question_socket.send request
+      @question_socket.send request.to_json
       handle_response JSON.load(@question_socket.read)
     end
 
@@ -93,7 +93,7 @@ class ConnectEthZMQ
 end
 
 if __FILE__==$0
-  ETH_ZMQ_ADDR = 'tcp://127.0.0.1:31315'
+  ENV['ETH_ZMQ_ADDR'] = 'tcp://127.0.0.1:31315'
 
   message = {}
   message['method'] = 'transact'

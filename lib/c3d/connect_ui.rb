@@ -48,13 +48,13 @@ class ConnectUI
     @answer_socket = RepSocket.new
 
     begin
-      @answer_socket.bind UI_ADDRESS
+      @answer_socket.bind ENV['UI_ADDRESS']
     rescue IOError
       @answer_socket.close
       raise
     end
 
-    puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] c3D<-ui on port >>\t#{UI_ADDRESS.split(':').last}"
+    puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] c3D<-ui on port >>\t#{ENV['UI_ADDRESS'].split(':').last}"
   end
 
   def run
@@ -99,10 +99,4 @@ class ConnectUI
     end
     @answer_socket.send JSON.dump message
   end
-end
-
-if __FILE__==$0
-  UI_ADDRESS = 'tcp://127.0.0.1:31314'
-  ui_socket  = ConnectUI.new
-  ui_socket.async.run
 end

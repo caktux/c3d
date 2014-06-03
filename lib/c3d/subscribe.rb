@@ -11,7 +11,7 @@ require 'json'
 require 'celluloid/autostart'
 require 'base64'
 
-class Subscriber
+class Subscribe
   include Celluloid
   attr_accessor :tor_file, :blob_file, :sha1_trun
 
@@ -87,8 +87,8 @@ class Subscriber
   private
 
     def load_library
-      watched = JSON.load File.read WATCH_FILE
-      ignored = JSON.load File.read IGNORE_FILE
+      watched = JSON.load File.read ENV['WATCH_FILE']
+      ignored = JSON.load File.read ENV['IGNORE_FILE']
       [watched, ignored]
     end
 
@@ -109,7 +109,7 @@ class Subscriber
     def do_i_have_it? blob
       dn   = blob[42..-1]
       p 'dont have this'
-      File.exists?(File.join(BLOBS_DIR, dn))
+      File.exists?(File.join(ENV['BLOBS_DIR'], dn))
     end
 
     def get_the_blob blob
@@ -127,24 +127,12 @@ if __FILE__==$0
   require './connect_torrent'
   require 'yaml'
   require 'httparty'
-  SWARM_DIR    = File.join(ENV['HOME'], '.cache', 'c3d')
-  BLOBS_DIR    = File.join(SWARM_DIR, 'blobs')
-  WATCH_FILE   = File.join(SWARM_DIR, 'watchers.json')
-  IGNORE_FILE  = File.join(SWARM_DIR, 'ignored.json')
-  TORRENT_RPC  = 'http://127.0.0.1:9091/transmission/rpc'
-  TORRENT_USER = 'username'
-  TORRENT_PASS = 'password'
   @@swarm_puller = TorrentAPI.new(
-    username:   TORRENT_USER,
-    password:   TORRENT_PASS,
-    url:        TORRENT_RPC,
+    username:   ENV['TORRENT_USER'],
+    password:   ENV['TORRENT_PASS'],
+    url:        ENV['TORRENT_RPC'],
     debug_mode: true
   )
-  ETH_ADDRESS  = 'tcp://127.0.0.1:31315'
-  '4320838ed6aff9ad8df45e261780af69e7c599ba'
-  '0xD4C592AD47DF267F41D6083533935818BFE74849BAE86F872ABE2A778200000'
-  questions_for_eth = ConnectEthZMQ.new :socket
-  Subscriber.new 'assembleQueries', questions_for_eth
+  questions_for_eth = ConnectEth.new :zmq, :cpp
+  Subscribe.new 'assembleQueries', questions_for_eth
 end
-
-# when storage 0x11 is 0x16 contract is empty.

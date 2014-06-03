@@ -10,10 +10,10 @@ require 'json'
 class ConnectEthRPC
   include Celluloid
 
-  def initialize client, host=ETH_RPC_HOST, port=ETH_RPC_PORT
+  def initialize client, host=ENV['ETH_HOST'], port=ENV['ETH_PORT']
     @client = client
     @question_socket = TCPSocket.new host, port
-    puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] c3D->eth via RPC on port >>\t#{ETH_RPC_PORT.split(':').last}"
+    puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] c3D->eth via RPC on port >>\t#{ENV['ETH_PORT']}"
   end
 
   def get_storage_at address, storage_location
@@ -64,10 +64,10 @@ class ConnectEthRPC
                   id: 1,
                   method: 'transact',
                   params: [{
-                            sec: #todo: key,
+                            sec: '',#todo: key,
                             xValue: value,
                             aDest: recipient,
-                            bData: #todo: build_data data,
+                            bData: '',#todo: build_data data,
                             xGas: gas,
                             xGasPrice: gas_price
                           }]
@@ -98,7 +98,7 @@ class ConnectEthRPC
                   id: 1,
                   method: "create",
                   params: [{
-                             sec: #todo: key,
+                             sec: '',#todo: key,
                              xEndowment: endowment,
                              bCode: body_content,
                              xGas: gas,

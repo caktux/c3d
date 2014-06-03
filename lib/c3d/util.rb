@@ -6,7 +6,7 @@
 module Utility
   def self.add_group_to_ethereum sending_addr, contract_id, title, eth
     message = {}
-    message['command'] = 'c3dRequestsAddGroup'
+    message['command'] = 'transact'
     message['params']  = [
       sending_addr,    #sender_addr
       '',              #value

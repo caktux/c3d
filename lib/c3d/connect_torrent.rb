@@ -59,7 +59,7 @@ class TorrentAPI
         :method => "torrent-add",
         :arguments => {
           :filename => filename,
-          :'download-dir' => BLOBS_DIR,
+          :'download-dir' => ENV['BLOBS_DIR'],
           :'peer-limit' => 99
         }
       )
@@ -145,21 +145,3 @@ class TorrentAPI
       log "------------------"
     end
 end
-
-# added = swarm_puller.create("#{t.magnet_link}")
-
-# [{"addedDate"=>1400177739,
-#   "files"=>
-#    [{"bytesCompleted"=>31752192,
-#      "length"=>591396864,
-#      "name"=>"ubuntu-14.04-server-amd64.iso"}],
-#   "id"=>1,
-#   "isFinished"=>false,
-#   "name"=>"ubuntu-14.04-server-amd64.iso",
-#   "percentDone"=>0.0536,
-#   "rateDownload"=>706000,
-#   "rateUpload"=>3000,
-#   "totalSize"=>591396864}]
-
-# swarm_puller.destroy(1)
-# torrent = swarm_puller.find(1)

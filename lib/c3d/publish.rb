@@ -3,12 +3,15 @@
 # and work by @Burgestrand here: https://gist.github.com/Burgestrand/1733611
 # note `rhash` dependency
 
-class PublishBlob
+class Publish
   include Celluloid
   attr_accessor :tor_file, :blob_file, :sha1_trun
 
-  def initialize blob, sending_addr, contract_id='', group_id=''
+  def initialize puller, eth, blob, sending_addr, contract_id='', group_id=''
+    @swarm_puller = puller
+    @eth = eth
     @piecelength = 32 * 1024
+
     unless blob == nil
       prepare blob
       build
@@ -24,8 +27,8 @@ class PublishBlob
     def prepare blob
       sha1_full = Digest::SHA1.hexdigest blob
       @sha1_trun = sha1_full[0..23]
-      @tor_file  = File.join(TORRENTS_DIR, "#{sha1_trun}.torrent")
-      @blob_file = File.join(BLOBS_DIR, sha1_trun)
+      @tor_file  = File.join(ENV['TORRENTS_DIR'], "#{sha1_trun}.torrent")
+      @blob_file = File.join(ENV['BLOBS_DIR'], sha1_trun)
       File.open(@blob_file, 'w'){|f| f.write(blob)}
       @files = [{ path: @blob_file.split('/'), length: File::open(@blob_file).size }]
     end
@@ -73,7 +76,8 @@ class PublishBlob
     end
 
     def publish_torrent
-      torrent  = @@swarm_puller.create @tor_file
+      p "#{@swarm_puller}"
+      torrent  = @swarm_puller.create @tor_file
       begin
         @btih     = torrent["torrent-added"]['hashString']
       rescue
@@ -92,7 +96,7 @@ class PublishBlob
         group_id,
         post_id
       ]
-      @@eth.transact contract_id, sending_addr, data
+      @eth.transact contract_id, sending_addr, data
     end
 end
 
