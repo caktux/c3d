@@ -16,9 +16,6 @@ Dir[File.dirname(__FILE__) + '/c3d/*.rb'].each {|file| require file }
 
 SetupC3D.new
 
-TransmissionRunner.new.start_transmission
-sleep 5
-
 TorrentAPI.supervise_as :puller, {
     username: ENV['TORRENT_USER'],
     password: ENV['TORRENT_PASS'],

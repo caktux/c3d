@@ -75,7 +75,6 @@ class Publish
     end
 
     def publish_torrent
-      p "#{@swarm_puller}"
       torrent  = @swarm_puller.create @tor_file
       begin
         @btih     = torrent["torrent-added"]['hashString']
