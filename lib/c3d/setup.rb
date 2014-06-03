@@ -5,12 +5,15 @@ require 'fileutils'
 class SetupC3D
   include Celluloid
 
-  def initialize
+  def initialize socket=''
     set_deps
     config = get_config
     set_the_env config
     set_trans_config config
     set_c3d_config config
+    TransmissionRunner.start_transmission
+    EthZmqRunner.start_ethereum_zmq_bridge if ENV['ETH_CONNECTOR'] == 'zmq'
+    sleep 2
   end
 
   def set_deps
@@ -32,18 +35,19 @@ class SetupC3D
   end
 
   def set_the_env config
-    ENV['SWARM_DIR']    = config['swarm_dir']
-    ENV['TORRENTS_DIR'] = config['torrents_dir']
-    ENV['BLOBS_DIR']    = config['blobs_dir']
-    ENV['WATCH_FILE']   = config['watch_file']
-    ENV['IGNORE_FILE']  = config['ignore_file']
-    ENV['TORRENT_RPC']  = config['torrent_rpc']
-    ENV['TORRENT_USER'] = config['torrent_user']
-    ENV['TORRENT_PASS'] = config['torrent_pass']
-    ENV['UI_ADDRESS']   = config['ui_address']
-    ENV['ETH_ZMQ_ADDR'] = config['eth_zmq_addr']
-    ENV['ETH_HOST']     = config['eth_host']
-    ENV['ETH_PORT']     = config['eth_port']
+    ENV['SWARM_DIR']     = config['swarm_dir']
+    ENV['TORRENTS_DIR']  = config['torrents_dir']
+    ENV['BLOBS_DIR']     = config['blobs_dir']
+    ENV['WATCH_FILE']    = config['watch_file']
+    ENV['IGNORE_FILE']   = config['ignore_file']
+    ENV['TORRENT_RPC']   = config['torrent_rpc']
+    ENV['TORRENT_USER']  = config['torrent_user']
+    ENV['TORRENT_PASS']  = config['torrent_pass']
+    ENV['UI_ADDRESS']    = config['ui_address']
+    ENV['ETH_CONNECTOR'] = config['eth_connector']
+    ENV['ETH_ZMQ_ADDR']  = config['eth_zmq_addr']
+    ENV['ETH_HOST']      = config['eth_rpc_host']
+    ENV['ETH_PORT']      = config['eth_rpc_port']
   end
 
   def set_trans_config config

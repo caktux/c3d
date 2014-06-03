@@ -19,6 +19,7 @@ class ConnectEthZMQ
     rescue IOError
       @question_socket.close
     end
+
     puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] c3D->eth via ZMQ and JS Socket on port >>\t#{ENV['ETH_ZMQ_ADDR'].split(':').last}"
   end
 
