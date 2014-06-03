@@ -20,12 +20,12 @@ TransmissionRunner.new.start_transmission
 sleep 5
 
 TorrentAPI.supervise_as :puller, {
-  username: ENV['TORRENT_USER'],
-  password: ENV['TORRENT_PASS'],
-  url: ENV['TORRENT_RPC'] }
+    username: ENV['TORRENT_USER'],
+    password: ENV['TORRENT_PASS'],
+    url:      ENV['TORRENT_RPC'] }
 @swarm_puller = Celluloid::Actor[:puller]
 
-@eth = ConnectEthZMQ.new #:zmq, :cpp
+@eth = ConnectEthZMQ.new
 # @ui  = ConnectUI.new
 # @ui.async.run
 

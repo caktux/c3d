@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 # based off of work by @mukaibot here: https://github.com/mukaibot/mktorrent/blob/master/lib/mktorrent.rb
 # and work by @Burgestrand here: https://gist.github.com/Burgestrand/1733611
-# note `rhash` dependency
 
 class Publish
   include Celluloid
