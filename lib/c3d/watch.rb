@@ -6,36 +6,36 @@
 #   * `ignore-k`        add a contract's blobs to the ignore list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
 #   * `unignore-k`      remove a contract's blobs from the ignore list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
 
-class EyeOfZorax
-  include Celluloid
-  attr_accessor :subscribed, :ignored
-
-  def initialize
-    @subscribe_file = ENV['WATCH_FILE']
-    @ignore_file = ENV['IGNORE_FILE']
-    loader @subscribed, @subscribe_file
-    loader @ignored, @ignore_file
-  end
+module EyeOfZorax
+  extend self
 
   def subscribe contract
-    adder @subscribed, @subscribe_file, contract
+    subscribe_file = ENV['WATCH_FILE']
+    subscribed = loader subscribe_file
+    adder subscribed, subscribe_file, contract
   end
 
   def unsubscribe contract
+    subscribe_file = ENV['WATCH_FILE']
+    subscribed = loader subscribe_file
     remover @subscribed, @subscribe_file, contract
   end
 
   def ignore contract
-    adder @ignored, @ignore_file, contract
+    ignore_file = ENV['IGNORE_FILE']
+    ignore = loader ignore_file
+    adder ignored, ignore_file, contract
   end
 
   def unignore contract
+    ignore_file = ENV['IGNORE_FILE']
+    ignore = loader ignore_file
     remover @ignored, @ignore_file, contract
   end
 
   private
-    def loader object, file
-      object = JSON.load File.read file
+    def loader file
+      return JSON.load File.read file
     end
 
     def saver object, file
@@ -47,7 +47,6 @@ class EyeOfZorax
         object << contract if contract.class == (String || Array)
         object.flatten if contract.class == Array
         saver object, file
-        loader object, file
         return true
       else
         return false
@@ -62,7 +61,6 @@ class EyeOfZorax
           contract.each{ |c| object.delete c }
         end
         saver object, file
-        loader object, file
         return true
       else
         return false

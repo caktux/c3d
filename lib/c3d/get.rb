@@ -1,16 +1,16 @@
 #!/usr/bin/env ruby
 
-class Getter
-  include Celluloid
+module Getter
+  extend self
 
-  def initialize puller, btih, dn
+  def get puller, blob_id
     @puller = puller
-    mag_link = "magnet:?xt=urn:btih:" + btih + "&dn=" + dn
-    get_it
-  end
-
-  private
-    def get_it
-      torrent  = @puller.create @tor_file
+    if blob_id[0..1] == '0x'
+      blob_id = blob_id[2..-1]
     end
+    btih    = blob_id[0..39]
+    dn      = blob_id[40..-1]
+    mag_link = "magnet:?xt=urn:btih:" + btih + "&dn=" + dn
+    @puller.create @tor_file
+  end
 end
