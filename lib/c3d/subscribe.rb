@@ -1,12 +1,5 @@
 #!/usr/bin/env ruby
 
-# Queries:
-#   * `subscribe-k`:    add a contract's blobs to the subscribed list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
-#   * `subscribe-g`:    add a group's blobs to the subscribed list (params: contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-#   * `unsubscribe-k`   remove a contract's blobs from the subscribed list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
-#   * `unsubscribe-g`   remove a group's blobs from the subscribed list (params: contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-#   * `ignore-g`        add a group to the ignore list (params: contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-
 require 'json'
 require 'celluloid/autostart'
 require 'base64'
@@ -15,22 +8,10 @@ class Subscribe
   include Celluloid
   attr_accessor :tor_file, :blob_file, :sha1_trun
 
-  def initialize action, eth
+  def initialize puller, eth
     @eth = eth
-    case action
-    when 'subscribeK'
-      subscribe_k
-    when 'subscribeG'
-      subscribe_g
-    when 'unsubscribeK'
-      unsubscribe_k
-    when 'unsubscribeG'
-      unsubscribe_g
-    when 'ignoreG'
-      ignore_g
-    when 'assembleQueries'
-      assemble_queries
-    end
+    @puller = puller
+    assemble_queries
   end
 
   def assemble_queries
@@ -97,7 +78,7 @@ class Subscribe
     end
 
     def eth_strings input
-      input.scan(/../).map{|x| x.hex }.reject{|c| c == 0}.pack('c*')
+      input.scan(/../).map{ |x| x.hex }.reject{|c| c == 0}.pack('c*')
     end
 
     def iterate input
@@ -117,22 +98,24 @@ class Subscribe
       dn   = blob[42..-1]
       link = "magnet:?xt=urn:btih:" + btih + "&dn=" + dn
       p 'getting_link'
-      torrent  = @@swarm_puller.create link
+      torrent  = @puller.create link
       p torrent
     end
 end
 
 if __FILE__==$0
-  require './connect_ethereum.rb'
+  require './connect_ethereum_socket'
   require './connect_torrent'
   require 'yaml'
   require 'httparty'
-  @@swarm_puller = TorrentAPI.new(
+
+  puller = TorrentAPI.new(
     username:   ENV['TORRENT_USER'],
     password:   ENV['TORRENT_PASS'],
     url:        ENV['TORRENT_RPC'],
     debug_mode: true
   )
-  questions_for_eth = ConnectEth.new :zmq, :cpp
-  Subscribe.new 'assembleQueries', questions_for_eth
+  eth = ConnectEth.new :zmq, :cpp
+
+  Subscribe.new puller, eth
 end
