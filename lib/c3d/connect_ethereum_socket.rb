@@ -56,23 +56,6 @@ class ConnectEthZMQ
     send_message request
   end
 
-  def create body_file, endowment=0, key='', gas=10000
-    body = File.read(body_file)
-    #todo -- add variable gas_price
-
-    request = {
-                method: 'create',
-                params: [
-                          key, #todo -- fix this -- especially in the socket listeners.
-                          endowment,
-                          body,
-                          gas
-                        ]
-              }
-
-    send_message request
-  end
-
   private
 
     def guard_addresses address
