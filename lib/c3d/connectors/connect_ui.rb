@@ -41,10 +41,7 @@ Celluloid::ZMQ.init
 class ConnectUI
   include Celluloid::ZMQ
 
-  def initialize puller, eth
-    @puller = puller
-    @eth = eth
-
+  def initialize
     @answer_socket = RepSocket.new
     @push_socket   = PubSocket.new
 
@@ -70,37 +67,49 @@ class ConnectUI
     case message['method']
     when 'get'
       blob_id = message['params'][0]
-      Getter.get @puller, blob_id
+      Getter.get blob_id
+      message = 'blob added to the acquire queue'
     when 'makeBlob'
       blob         = message['params'][0]
-      PublishBlob.new blob, nil
+      blob         = Blobber.new blob
+      blob_id      = "0x#{blob.btih}#{blob.sha1_trun}"
+      link_id      = "0x#{blob.sha1_trun}#{blob.btih}"
+      message = {}
+      message['blob_id'] = blob_id
+      message['link_id'] = link_id
     when 'destroyBlob'
-      #todo
-    when 'addBlobToK'
-      sending_addr = message['params'][0]
-      contract_id  = message['params'][1]
-      group_id     = message['params'][2]
-      PublishBlob.new nil, sending_addr, contract_id, group_id
-    when 'rmBlobFromK'
-      #todo
+      blob_id = message['params'][0]
+      Destroyer.destroy blob_id
+      message = 'blob removed from cache'
     when 'subscribeK'
       contract = message['params'][0]
       EyeOfZorax.subscribe contract
+      message = 'contract added'
     when 'unsubscribeK'
       contract = message['params'][0]
       EyeOfZorax.unsubscribe contract
+      message = 'contract removed'
     when 'ignoreK'
       contract = message['params'][0]
       EyeOfZorax.ignore contract
+      message = 'contract added'
     when 'unignoreK'
       contract = message['params'][0]
       EyeOfZorax.unignore contract
-    when 'publish'
-      sending_addr = message['params'][0]
-      contract_id  = message['params'][1]
-      group_id     = message['params'][2]
-      blob         = message['params'][3]
-      PublishBlob.new blob, sending_addr, contract_id, group_id
+      message = 'contract removed'
+    # TODO - rearrange these bylaw transactions
+    # when 'publish'
+    #   sending_addr = message['params'][0]
+    #   contract_id  = message['params'][1]
+    #   group_id     = message['params'][2]
+    #   blob         = message['params'][3]
+    #   PublishBlob.new blob, sending_addr, contract_id, group_id
+    # when 'addBlobToK'
+    #   contract_id  = message['params'][0]
+    #   group_id     = message['params'][1]
+    #   PublishBlob.new contract_id, group_id
+    # when 'rmBlobFromK'
+    #   #todo
     end
     @answer_socket.send JSON.dump message
   end
