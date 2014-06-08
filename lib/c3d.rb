@@ -31,7 +31,7 @@ $puller = Celluloid::Actor[:puller]
 ConnectEth.supervise_as :eth, :cpp
 $eth = Celluloid::Actor[:eth]
 
-$ui  = ConnectUI.new @puller, @eth
+$ui  = ConnectUI.new
 $ui.async.run
 
 if __FILE__==$0
@@ -53,8 +53,8 @@ if __FILE__==$0
   post              = PostToThread.new blob2, create_post_bylaw, thread_id
   post_id           = post.post_id
 
-  p topic_id
-  p thread_id
-  p thread_blob
-  p post_id
+  EyeOfZorax.subscribe topic_id
+  EyeOfZorax.subscribe thread_id
+  EyeOfZorax.subscribe thread_blob
+  EyeOfZorax.subscribe post_id
 end
