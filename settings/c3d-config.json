@@ -15,5 +15,6 @@
   "ignore_file": "/home/coda/.cache/c3d/ignored.json",
   "download_dir": "/home/coda/.cache/c3d/downloading",
   "download-queue-size": "50",
-  "queue-stalled-minutes": "98"
+  "queue-stalled-minutes": "98",
+  "primary_account":"a6cb63ec28c12929bee2d3567bf98f374a0b7167"
 }

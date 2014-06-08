@@ -15,23 +15,6 @@ module TransmissionRunner
   end
 end
 
-module EthZmqRunner
-  extend self
-
-  def start_ethereum_zmq_bridge
-    unless is_bridge_running?
-      c3d_node = File.join(File.dirname(__FILE__), '..', '..', 'node_modules', 'c3d', 'connect_aleth.js')
-      pid = spawn "node #{c3d_node}"
-      at_exit { Process.kill("INT", pid) }
-    end
-  end
-
-  def is_bridge_running?
-    a = `ps ux`.split("\n").select{|e| e[/node.*connect_aleth.js$/]}
-    return (! a.empty?)
-  end
-end
-
 module EthRunner
   extend self
 

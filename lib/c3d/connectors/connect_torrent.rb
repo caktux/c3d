@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # This is based off of work by fguillen for the transmission_api gem here: https://github.com/fguillen/TransmissionApi
 
-class TorrentAPI
+class ConnectTorrent
   include Celluloid
   attr_accessor :session_id, :url, :basic_auth, :fields, :debug_mode
 
@@ -52,7 +52,7 @@ class TorrentAPI
   end
 
   def create filename
-    log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Adding Blob >> \t"+ "#{filename}"), true
+    log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Adding Blob >>\t\t"+ "#{filename}"), true
 
     response =
       post(

@@ -1,28 +1,23 @@
 #!/usr/bin/env ruby
-# based off of work by @mukaibot here: https://github.com/mukaibot/mktorrent/blob/master/lib/mktorrent.rb
+# based off of work by mukaibot here: https://github.com/mukaibot/mktorrent/blob/master/lib/mktorrent.rb
 # and work by @Burgestrand here: https://gist.github.com/Burgestrand/1733611
 
-class Publish
+class Blobber
   include Celluloid
-  attr_accessor :tor_file, :blob_file, :sha1_trun
+  attr_accessor :tor_file, :blob_file, :sha1_trun, :btih
 
-  def initialize puller, eth, blob, sending_addr, contract_id='', group_id=''
-    @puller = puller
-    @eth = eth
+  def initialize blob
     @piecelength = 32 * 1024
-
-    unless blob == nil
+    if blob
       prepare blob
       build
       write_torrent
       publish_torrent
     end
-    unless sending_addr == nil
-      publish_ethereum sending_addr, contract_id, group_id
-    end
   end
 
   private
+
     def prepare blob
       sha1_full = Digest::SHA1.hexdigest blob
       @sha1_trun = sha1_full[0..23]
@@ -52,7 +47,7 @@ class Publish
 
     def read_pieces file, length
       buffer = ""
-      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Hashing Blob >> \t" + "#{file.join("/")}"
+      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Hashing Blob >>\t\t" + "#{file.join("/")}"
       File.open(file.join("/")) do |fh|
         begin
           read = fh.read(length - buffer.length)
@@ -71,30 +66,17 @@ class Publish
       File.open(@tor_file, 'w') do |torrentfile|
         torrentfile.write @info.bencode
       end
-      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Torrent Link >> \t" + "#{@tor_file}"
+      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Torrent Link >>\t\t" + "#{@tor_file}"
     end
 
     def publish_torrent
-      torrent  = @puller.create @tor_file
+      torrent  = $puller.create @tor_file
       begin
         @btih     = torrent["torrent-added"]['hashString']
       rescue
         @btih     = torrent["torrent-duplicate"]['hashString']
       end
       mag_link = "magnet:?xt=urn:btih:" + @btih + "&dn=" + @sha1_trun
-      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Magnet Link >> \t" + mag_link
-    end
-
-    def publish_ethereum sending_addr, contract_id, group_id
-      message = {}
-      post_id = "0x#{@btih}#{@sha1_trun}"
-      data  = [
-        '3',             #data_slots
-        'newp',          #....data
-        group_id,
-        post_id
-      ]
-      @eth.transact contract_id, sending_addr, data
+      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Magnet Link >>\t\t" + mag_link
     end
 end
-

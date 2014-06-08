@@ -18,10 +18,6 @@ class SetupC3D
 
   def set_deps
     dep_exist? 'transmission-daemon', 'sudo apt-get install transmission-daemon'
-    dep_exist? 'node', 'sudo apt-get install nodejs'
-    unless File.directory? File.join(File.dirname(__FILE__), '..', '..', 'node_modules', 'c3d')
-      `cd #{File.join(File.dirname(__FILE__), '..', '..')} && npm install c3d`
-    end
   end
 
   def get_config
@@ -49,6 +45,7 @@ class SetupC3D
     ENV['ETH_ZMQ_ADDR']  = config['eth_zmq_addr']
     ENV['ETH_HOST']      = config['eth_rpc_host']
     ENV['ETH_PORT']      = config['eth_rpc_port']
+    ENV['ETH_KEY']       = config['primary_account_key']
   end
 
   def set_trans_config config
@@ -76,8 +73,8 @@ class SetupC3D
 
   def start_processes socket
     TransmissionRunner.start_transmission
-    EthZmqRunner.start_ethereum_zmq_bridge if ( ENV['ETH_CONNECTOR'] == 'zmq' || socket == 'zmq' )
-    sleep 2
+    # EthZmqRunner.start_ethereum_zmq_bridge if ( ENV['ETH_CONNECTOR'] == 'zmq' || socket == 'zmq' )
+    # sleep 2
   end
 
   def dir_exist? directry
