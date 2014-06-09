@@ -39,10 +39,10 @@ if __FILE__==$0
   blob1             = File.read(test_file) + "\n#{Time.now}\n#{rand(100000)}"
   blob2             = File.read(test_file) + "\n\n#{Time.now}\n\n#{rand(100000)}"
   blob3             = File.read(test_file) + "\n\n\n#{Time.now}\n\n\n#{rand(100000)}"
-  create_topc_bylaw = '0x97f39004ada6817493041bdcbf3e336d83866a28'
-  create_thrd_bylaw = '0xbf243f9c059b4f9ee80b86d56facbd41db16bbc1'
-  create_post_bylaw = '0x8f132061db2cded96b6d984eb072ca0159c9bd7b'
-  swarum_top        = '0xe26d03f0f61f4a68fa415094291d7aa0186abc69'
+  create_topc_bylaw = '0xac87f593b892e9c25bfe5c8e085ecf80bb9b7a70'
+  create_thrd_bylaw = '0xcc58b5745edec3574025f35c30ffc44fe843637e'
+  create_post_bylaw = '0xf1c290bd72d37e14d3bc7efc6eee6143ac54e37a'
+  swarum_top        = '0xd28218256cdfc6f5b369e3e549a3f528ba8ff322'
 
   if ARGV[0] == 'first'
     topic             = CreateTopic.new  blob1, create_topc_bylaw, swarum_top
@@ -50,7 +50,7 @@ if __FILE__==$0
   end
 
   if ARGV[0] == 'second'
-    topic_id = '0xBF823AAAE9A87624B3FA1EFD909AE1B9148C99A2'
+    topic_id = '0x69d3a3c7f1818475a064e419a5267be42c6d98b6'
   end
 
   if ARGV[0] == 'first'
@@ -60,7 +60,7 @@ if __FILE__==$0
   end
 
   if ARGV[0] == 'second'
-    thread_id = '0x9A17422AAF5524F184A00DE597E256A93AD06B61'
+    thread_id = '0x6dbe4c8f2fe525cc93d22f732f695c52f1f0a77a'
   end
 
   if ARGV[0] == 'first'
