@@ -17,7 +17,7 @@ class SetupC3D
   private
 
   def set_deps
-    dep_exist? 'transmission-daemon', 'sudo apt-get install transmission-daemon'
+    dep_exist? 'transmission-daemon', 'sudo apt-get install transmission-daemon && sudo service transmission-daemon stop && sudo update-rc.d -f transmission-daemon remove'
   end
 
   def get_config
