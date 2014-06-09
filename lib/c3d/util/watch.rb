@@ -18,7 +18,7 @@ module EyeOfZorax
   def unsubscribe contract
     subscribe_file = ENV['WATCH_FILE']
     subscribed = loader subscribe_file
-    remover @subscribed, @subscribe_file, contract
+    remover subscribed, subscribe_file, contract
   end
 
   def ignore contract
@@ -30,12 +30,19 @@ module EyeOfZorax
   def unignore contract
     ignore_file = ENV['IGNORE_FILE']
     ignore = loader ignore_file
-    remover @ignored, @ignore_file, contract
+    remover ignored, ignore_file, contract
   end
 
   private
     def loader file
-      return JSON.load File.read file
+      begin
+        j = JSON.load File.read file
+      rescue
+        j = []
+      end
+      j = [] unless j
+      p j
+      return j
     end
 
     def saver object, file
