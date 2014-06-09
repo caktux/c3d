@@ -12,9 +12,14 @@
   "eth_zmq_addr": "tcp://127.0.0.1:31315",
   "eth_rpc_host": "localhost",
   "eth_rpc_port": "9090",
+  "eth_remote":"54.201.28.117",
+  "eth_peer_port":"30303",
+  "eth_client_name":"c3d-headless",
+  "blockchain_dir":"{{USERHOME}}/.ethereum",
   "ignore_file": "{{USERHOME}}/.cache/c3d/ignored.json",
   "download_dir": "{{USERHOME}}/.cache/c3d/downloading",
   "download-queue-size": "50",
   "queue-stalled-minutes": "98",
-  "primary_account":"a6cb63ec28c12929bee2d3567bf98f374a0b7167"
+  "primary_account":"{{0xACCT}}",
+  "primary_account_key":"{{0xSEC}}"
 }

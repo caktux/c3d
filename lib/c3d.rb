@@ -20,7 +20,7 @@ Dir[File.dirname(__FILE__) + '/c3d/bylaws/*.rb'].each {|file| require file }
 Dir[File.dirname(__FILE__) + '/c3d/connectors/*.rb'].each {|file| require file }
 Dir[File.dirname(__FILE__) + '/c3d/util/*.rb'].each {|file| require file }
 
-SetupC3D.new 'rpc'
+SetupC3D.new
 
 ConnectTorrent.supervise_as :puller, {
     username: ENV['TORRENT_USER'],

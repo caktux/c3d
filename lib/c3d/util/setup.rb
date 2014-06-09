@@ -5,13 +5,13 @@ require 'fileutils'
 class SetupC3D
   include Celluloid
 
-  def initialize socket=''
+  def initialize
     set_deps
     config = get_config
     set_the_env config
     set_trans_config config
     set_c3d_config config
-    start_processes socket
+    start_processes config
   end
 
   private
@@ -26,11 +26,22 @@ class SetupC3D
     config_example = File.join(File.dirname(__FILE__), '..', '..', '..', 'settings', 'c3d-config.json')
     unless File.exists? config_file
       tmp = File.read config_example
-      until ! tmp[/(\{\{.*?\}\})/]
+      until ! tmp[/(\{\{USERHOME\}\})/]
         tmp.gsub!("{{USERHOME}}", ENV["HOME"])
+        p 'hello'
       end
+      print "Before we begin, I need to ask you two personal questions:\n"
+      print "What is your primary account which I should be using to send transactions?\n\n"
+      account = gets.chomp
+      print "Thanks. #{account} is what I will use.\n"
+      print "Thanks. Now what is the private key for that account which I should be using?\n\n"
+      secret = gets.chomp
+      print "Thanks. #{secret} is what I will use.\n"
+      account = "0x#{account}" if account[0..1] != '0x'
+      secret = "0x#{secret}" if secret[0..1] != '0x'
+      tmp.gsub!("{{0xACCT}}", account)
+      tmp.gsub!("{{0xSEC}}", secret)
       File.open(config_file, 'w'){|f| f.write(tmp)}
-      # FileUtils.cp config_example, config_file
     end
     return JSON.load(File.read(config_file))
   end
@@ -76,10 +87,9 @@ class SetupC3D
     file_exist? ENV['IGNORE_FILE']
   end
 
-  def start_processes socket
+  def start_processes config
     TransmissionRunner.start_transmission
-    # EthRunner.start_ethereum_zmq_bridge if ( ENV['ETH_CONNECTOR'] == 'zmq' || socket == 'zmq' )
-    # sleep 2
+    EthRunner.start_ethereum config
   end
 
   def dir_exist? directry

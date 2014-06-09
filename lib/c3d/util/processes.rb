@@ -19,15 +19,24 @@ end
 module EthRunner
   extend self
 
-  def start_ethereum
+  def start_ethereum settings
     unless is_eth_running?
-      pid = spawn #{todo}
+      path = settings["path-to-eth"] || "/opt/cpp-ethereum/build/eth/eth"
+      port = settings["eth_rpc_port"] || "9090"
+      remote = settings["eth_remote"] || "54.201.28.117"
+      dir = settings["blockchain_dir"] || "~/.ethereum"
+      peer_port = settings["eth_peer_port"] || "30303"
+      client_name = settings["eth_client_name"] || "c3d-headless"
+      key = settings["primary_account_key"] || ""
+      pid = spawn "#{path} --json-rpc-port #{port} -r #{remote} -d #{dir} -m off -l #{peer_port} -c #{client_name} -s #{key}"
+      sleep 7
       at_exit { Process.kill("INT", pid) }
     end
   end
 
+
   def is_eth_running?
-    a = `ps ux`.split("\n").select{|e| e[/eth/]} #todo cleanup
+    a = `ps ux`.split("\n").select{|e| e[/eth --json-rpc-port/]}
     return (! a.empty?)
   end
 end
