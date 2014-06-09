@@ -1,8 +1,8 @@
 {
-  "swarm_dir": "/home/coda/.cache/c3d",
-  "torrents_dir": "/home/coda/.cache/c3d/torrents",
-  "blobs_dir": "/home/coda/.cache/c3d/blobs",
-  "watch_file": "/home/coda/.cache/c3d/watchers.json",
+  "swarm_dir": "{{USERHOME}}/.cache/c3d",
+  "torrents_dir": "{{USERHOME}}/.cache/c3d/torrents",
+  "blobs_dir": "{{USERHOME}}/.cache/c3d/blobs",
+  "watch_file": "{{USERHOME}}/.cache/c3d/watchers.json",
   "torrent_rpc": "http://127.0.0.1:9091/transmission/rpc",
   "torrent_user": "username",
   "torrent_pass": "password",
@@ -12,8 +12,8 @@
   "eth_zmq_addr": "tcp://127.0.0.1:31315",
   "eth_rpc_host": "localhost",
   "eth_rpc_port": "9090",
-  "ignore_file": "/home/coda/.cache/c3d/ignored.json",
-  "download_dir": "/home/coda/.cache/c3d/downloading",
+  "ignore_file": "{{USERHOME}}/.cache/c3d/ignored.json",
+  "download_dir": "{{USERHOME}}/.cache/c3d/downloading",
   "download-queue-size": "50",
   "queue-stalled-minutes": "98",
   "primary_account":"a6cb63ec28c12929bee2d3567bf98f374a0b7167"

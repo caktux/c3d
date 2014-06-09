@@ -23,9 +23,14 @@ class SetupC3D
   def get_config
     dir_exist? File.join(ENV['HOME'], '.epm')
     config_file  = File.join(ENV['HOME'], '.epm', 'c3d-config.json')
-    config_example = File.join(File.dirname(__FILE__), '..', '..', 'settings', 'c3d-config.json')
+    config_example = File.join(File.dirname(__FILE__), '..', '..', '..', 'settings', 'c3d-config.json')
     unless File.exists? config_file
-      FileUtils.cp config_example, config_file
+      tmp = File.read config_example
+      until ! tmp[/(\{\{.*?\}\})/]
+        tmp.gsub!("{{USERHOME}}", ENV["HOME"])
+      end
+      File.open(config_file, 'w'){|f| f.write(tmp)}
+      # FileUtils.cp config_example, config_file
     end
     return JSON.load(File.read(config_file))
   end
@@ -50,7 +55,7 @@ class SetupC3D
 
   def set_trans_config config
     trans_file = File.join(ENV['HOME'], '.epm', 'settings.json')
-    trans_example = File.join(File.dirname(__FILE__), '..', '..', 'settings', 'transmission.json')
+    trans_example = File.join(File.dirname(__FILE__), '..', '..', '..', 'settings', 'transmission.json')
     unless File.exists? trans_file
       FileUtils.cp trans_example, trans_file
     end
@@ -73,7 +78,7 @@ class SetupC3D
 
   def start_processes socket
     TransmissionRunner.start_transmission
-    # EthZmqRunner.start_ethereum_zmq_bridge if ( ENV['ETH_CONNECTOR'] == 'zmq' || socket == 'zmq' )
+    # EthRunner.start_ethereum_zmq_bridge if ( ENV['ETH_CONNECTOR'] == 'zmq' || socket == 'zmq' )
     # sleep 2
   end
 
