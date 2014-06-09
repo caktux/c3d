@@ -2,7 +2,6 @@
 
 require 'json'
 require 'celluloid/autostart'
-require 'base64'
 
 class Subscribe
   include Celluloid
@@ -14,11 +13,12 @@ class Subscribe
     @contracts = 0
     load_library
     assemble_and_perform_queries
-    p @groups.to_s + " || " + @blobs.to_s  + " || " + @contracts.to_s
+    p @contracts.to_s + " || " + @groups.to_s  + " || " + @blobs.to_s
   end
 
   def assemble_and_perform_queries
     until @watched.empty?
+      # p @watched
       get_the_contract @watched.shift
     end
   end
@@ -91,7 +91,7 @@ class Subscribe
         until group[:prev] == '0x30'
           group = get_the_group contract, group[:prev]
           check_then_get_the_blob group[:cont]
-          if group[:targ] and group[:type] == '0x01' and group[:behv] == '0x01'
+          if group[:targ] and group[:behv] == '0x01' #and group[:type] == '0x01'
             @watched.push group[:targ]
             @watched.uniq!
           end
@@ -146,18 +146,6 @@ class Subscribe
 end
 
 if __FILE__==$0
-  require './connect_ethereum_socket'
-  require './connect_torrent'
-  require 'yaml'
-  require 'httparty'
-
-  $puller = TorrentAPI.new(
-    username:   ENV['TORRENT_USER'],
-    password:   ENV['TORRENT_PASS'],
-    url:        ENV['TORRENT_RPC'],
-    debug_mode: true
-  )
-  $eth = ConnectEth.new :zmq, :cpp
-
-  Subscribe.new puller, eth
+  require '../../c3d.rb'
+  Subscribe.new
 end
