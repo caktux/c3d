@@ -33,7 +33,7 @@ class ConnectTorrent
         }
       )
 
-    response["arguments"]["torrent-added"]
+    response["arguments"]["torrents"]
   end
 
   def find id
@@ -67,7 +67,7 @@ class ConnectTorrent
     response["arguments"]
   end
 
-  def destroy(id)
+  def destroy id
     log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Remove Torrent ID >> "+ "#{id}"), true
 
     response =
