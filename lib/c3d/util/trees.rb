@@ -58,7 +58,7 @@ class TreeBuilder
         get_data_model contract
         get_ui_files contract
         group = {}
-        group[:prev] = send_query contract, '0x18'
+        group[:prev] = send_query contract, '0x19'
         until group[:prev] == '0x30'
           group = get_the_group contract, group[:prev]
           get_the_blob group[:cont] unless do_i_have_it? group[:cont]
@@ -77,7 +77,7 @@ class TreeBuilder
       ui = send_query contract, '0x12'
       @purge.push ui
       group = {}
-      group = send_query contract, '0x18'
+      group = send_query contract, '0x19'
       until group == '0x30'
         group = purge_the_group contract, group
       end
