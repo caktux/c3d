@@ -14,6 +14,7 @@
   "eth_rpc_port": "9090",
   "eth_remote":"54.201.28.117",
   "eth_peer_port":"30303",
+  "eth_mine":"off",
   "eth_client_name":"c3d-headless",
   "blockchain_dir":"{{USERHOME}}/.ethereum",
   "ignore_file": "{{USERHOME}}/.cache/c3d/ignored.json",

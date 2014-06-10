@@ -23,12 +23,27 @@ module EthRunner
     unless is_eth_running?
       path = settings["path-to-eth"] || "/opt/cpp-ethereum/build/eth/eth"
       port = settings["eth_rpc_port"] || "9090"
-      remote = settings["eth_remote"] || "54.201.28.117"
-      dir = settings["blockchain_dir"] || "~/.ethereum"
       peer_port = settings["eth_peer_port"] || "30303"
       client_name = settings["eth_client_name"] || "c3d-headless"
+      remote = settings["eth_remote"] || ""
+      if remote != ""
+        remote = "-r #{remote}"
+      end
+      dir = settings["blockchain_dir"] || ""
+      if dir != ""
+        dir = "-d #{dir}"
+      end
+      mine = settings["eth_mine"] || "off"
+      if mine == ("off" || "false")
+        mine = "-m off"
+      elsif mine == ("on" || "true")
+        mine = "-m on"
+      end
       key = settings["primary_account_key"] || ""
-      pid = spawn "#{path} --json-rpc-port #{port} -r #{remote} -d #{dir} -m off -l #{peer_port} -c #{client_name} -s #{key}"
+      if key != ""
+        key = "-s #{key}"
+      end
+      pid = spawn "#{path} --json-rpc-port #{port} -l #{peer_port} -c #{client_name} #{remote} #{dir} #{mine} #{key}"
       sleep 7
       at_exit { Process.kill("INT", pid) }
     end

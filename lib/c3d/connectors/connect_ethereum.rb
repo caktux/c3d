@@ -86,6 +86,27 @@ class ConnectEth
     send_command request
   end
 
+
+  def get_key
+    case @client
+    when :go
+      request = {
+                  id: 'c3d-client',
+                  method: "EthereumApi.GetKey",
+                  params: [{}]
+                }
+    when :cpp
+      request = {
+                  id: 'c3d-client',
+                  method: "key",
+                  params: {},
+                  jsonrpc: '2.0'
+                }
+    end
+
+    send_command request
+  end
+
   private
 
     def guard_addresses address

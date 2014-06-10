@@ -31,6 +31,8 @@ $puller = Celluloid::Actor[:puller]
 ConnectEth.supervise_as :eth, :cpp
 $eth = Celluloid::Actor[:eth]
 
+Utility.save_key
+
 $ui  = ConnectUI.new
 $ui.async.run
 
