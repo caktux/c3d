@@ -85,9 +85,9 @@ class TreeBuilder
 
     def can_we_get_the_k? contract
       behav = send_query contract, '0x18'
-      if behav == '0x01'
+      if behav == ('0x01' || '0x1')
         return true
-      elsif behav == '0x05'
+      elsif behav == ('0x05' || '0x5')
         @purge.push contract
       end
       return false
@@ -98,11 +98,9 @@ class TreeBuilder
       this_group = {}
       if can_we_get_the_group? contract, group_id
         if does_the_group_have_blobs? contract, group_id
-          group_id[-1] = '5'
-          this_group[:blob] = send_query contract, group_id
+          this_group[:blob] = send_query(contract, content_slot(group_id))
         end
-        group_id[-1] = '1'
-        this_group[:prev] = send_query contract, group_id
+        this_group[:prev] = send_query(contract, prev_link_slot(group_id))
       else
         this_group[:prev] = '0x30'
       end
@@ -111,34 +109,27 @@ class TreeBuilder
 
     def purge_the_group contract, group_id
       @groups   += 1
-      group_id[-1] = '5'
-      blob = send_query contract, group_id
+      blob = send_query(contract, content_slot(group_id))
       purge_the_blob blob
-      group_id[-1] = '1'
-      send_query contract, group_id
+      send_query(contract, prev_link_slot(group_id))
     end
 
     def can_we_get_the_group? contract, group_id
-      group_id[-1] = '4'
-      behav = send_query contract, group_id
-      if behav == '0x01'
+      behav = send_query(contract, behav_slot(group_id))
+      if behav == ('0x01' || '0x1')
         return true
-      elsif behav == '0x05'
-        group_id[-1] = '0'
+      elsif behav == ('0x05' || '0x5')
         @purge.push group_id
       end
       return false
     end
 
     def does_the_group_have_blobs? contract, group_id
-      group_id[-1] = '3'
-      type = send_query contract, group_id
+      type = send_query(contract, type_slot(group_id))
       if type == '0x'
-        group_id[-1] = '0'
         @parse.push group_id
         return false
-      elsif type == '0x01'
-        group_id[-1] = '0'
+      elsif type == ('0x01' || '0x1')
         @parse.push group_id
         return true
       else
@@ -203,5 +194,21 @@ class TreeBuilder
     def get_ui_files contract
       contract = send_query contract, '0x12'
       @parse.push contract
+    end
+
+    def prev_link_slot group_id
+      slot = "0x" + ((group_id.hex + 0x1).to_s(16))
+    end
+
+    def type_slot group_id
+      slot = "0x" + ((group_id.hex + 0x3).to_s(16))
+    end
+
+    def behav_slot group_id
+      slot = "0x" + ((group_id.hex + 0x4).to_s(16))
+    end
+
+    def content_slot group_id
+      slot = "0x" + ((group_id.hex + 0x5).to_s(16))
     end
 end

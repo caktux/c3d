@@ -16,11 +16,8 @@ class CreateTopic
     def build_transaction blob, create_topic_bylaw, swarum_top
       blob      = Blobber.new blob
       blob_id   = "0x#{blob.btih}#{blob.sha1_trun}"
-      link_id   = "0x#{blob.sha1_trun}#{blob.btih}"
-      link_id[-2..-1] = "00"
       data      = [
           swarum_top,          # swarum_top
-          link_id,             # link_id
           blob_id,             # blob_inner
           '',                  # model_inner
           '',                  # ui_inner
@@ -33,7 +30,7 @@ class CreateTopic
 
     def get_values swarum_top
       sleep 0.1                # to make sure the client has received the tx and posted to state machine
-      topic_memory_position = $eth.get_storage_at swarum_top, '0x18'
+      topic_memory_position = $eth.get_storage_at swarum_top, '0x19'
       @topic_id             = $eth.get_storage_at swarum_top, topic_memory_position
     end
 end
