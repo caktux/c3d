@@ -4,7 +4,7 @@ class BlacklistPost
   def initialize post_id, blacklist_post_bylaw, blacklist_top
     if post_id
       build_transaction post_id, blacklist_post_bylaw
-      get_values blacklist_top
+      get_values post_id, blacklist_top
     end
   end
 
@@ -15,9 +15,9 @@ class BlacklistPost
       $eth.transact blacklist_post_bylaw, data
     end
 
-    def get_values blacklist_top
+    def get_values post_id, blacklist_top
       sleep 0.1                # to make sure the client has received the tx and posted to state machine
-      post_position = $eth.get_storage_at blacklist_top, '0x18'
+      post_position = $eth.get_storage_at blacklist_top, '0x19'
       if post_position == post_id
         return true
       else
