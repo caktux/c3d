@@ -34,7 +34,7 @@ def get_dougs_storage position
 end
 
 def make_test_file
-  test_file = File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'tmp')
+  test_file = File.join(File.dirname(__FILE__), '..', 'fixtures', 'tmp')
   return File.read(test_file) + "\n#{Time.now}\n#{rand(100000)}"
 end
 
@@ -66,5 +66,5 @@ describe "Publishing Content from c3D to Ethereum" do
   end
 
   # @thread_blob = @thread.thread_blob
-  # @post_blob = @post.post_id
+  # @post_blob = @post.post_blob
 end
