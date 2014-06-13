@@ -38,7 +38,8 @@ class CreateThread
       sleep 0.1                # to make sure the client has received the tx and posted to state machine
       thread_memory_position = $eth.get_storage_at topic_id, '0x19'
       @thread_id             = $eth.get_storage_at topic_id, thread_memory_position
-      thread_blob_mem_positn = $eth.get_storage_at @thread_id, '0x19'
-      @thread_blob           = $eth.get_storage_at @thread_id, thread_blob_mem_positn
+      post_memory_position   = $eth.get_storage_at @thread_id, '0x19'
+      post_content_pos       = "0x" + ((post_memory_position.hex + 0x5).to_s(16))
+      @thread_blob           = $eth.get_storage_at @thread_id, post_content_pos
     end
 end

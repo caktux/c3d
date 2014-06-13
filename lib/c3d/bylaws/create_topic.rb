@@ -2,7 +2,7 @@
 # based off of work by
 
 class CreateTopic
-  attr_accessor :topic_id
+  attr_accessor :topic_id, :topic_blob
 
   def initialize blob, create_topic_bylaw, swarum_top
     if blob
@@ -32,5 +32,7 @@ class CreateTopic
       sleep 0.1                # to make sure the client has received the tx and posted to state machine
       topic_memory_position = $eth.get_storage_at swarum_top, '0x19'
       @topic_id             = $eth.get_storage_at swarum_top, topic_memory_position
+      post_content_pos      = "0x" + ((topic_memory_position.hex + 0x5).to_s(16))
+      @topic_blob           = $eth.get_storage_at swarum_top, post_content_pos
     end
 end

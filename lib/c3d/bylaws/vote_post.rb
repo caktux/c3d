@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
-class DownVotePost
+class VotePost
 
   def initialize post_id, up_or_down, up_down_vote_bylaw
-    if up_or_down == ( 'upvote' || 'downvote' )
+    if up_or_down == 'upvote' or up_or_down == 'downvote'
       if post_id
         build_transaction post_id, up_or_down, up_down_vote_bylaw
       end
