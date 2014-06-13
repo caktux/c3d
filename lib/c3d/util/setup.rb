@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
-require 'celluloid/autostart'
-require 'fileutils'
 
 class SetupC3D
   include Celluloid
@@ -120,9 +118,4 @@ class SetupC3D
     end
     return nil
   end
-end
-
-if __FILE__==$0
-  require 'json'
-  SetupC3D.new
 end
