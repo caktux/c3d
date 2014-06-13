@@ -18,8 +18,7 @@ class ConnectTorrent
     @fields = opts[:fields] || TORRENT_FIELDS
     @basic_auth = { :username => opts[:username], :password => opts[:password] } if opts[:username]
     @debug_mode = opts[:debug_mode] || false
-    # todo - connect to client, get, and save session_id
-    @session_id = "NOT-INITIALIZED"
+    @session_id = "c3d-torrent"
   end
 
   def all

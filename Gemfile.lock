@@ -23,7 +23,7 @@ GEM
     dotenv (0.11.1)
       dotenv-deployment (~> 0.0.2)
     dotenv-deployment (0.0.2)
-    epm (0.3.6)
+    epm (0.3.7)
       commander (~> 4.1.6)
     ffi (1.9.3)
     ffi-rzmq (2.0.1)
