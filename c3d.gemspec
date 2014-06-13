@@ -24,6 +24,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'bencode', '~> 0.8'
   s.add_runtime_dependency 'celluloid', '~> 0.15'
   s.add_runtime_dependency 'celluloid-zmq', '~> 0.15'
+  s.add_development_dependency 'rspec', '~> 3.0'
+  s.add_development_dependency 'epm'
 
   s.description       = <<desc
   This gem is designed to assist in distribution mangement of content which is controlled by an Ethereum contract.
