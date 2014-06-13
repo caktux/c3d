@@ -11,8 +11,3 @@ class Subscribe
     TreeBuilder.new @parse, @purge
   end
 end
-
-if __FILE__==$0
-  require '../../c3d.rb'
-  Subscribe.new
-end

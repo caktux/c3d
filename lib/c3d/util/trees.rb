@@ -5,19 +5,25 @@ class TreeBuilder
   attr_accessor :groups, :blobs, :parse, :purge
 
   def initialize parse=[], purge=[], debug=false
-    @groups = 0
-    @blobs  = 0
-    @parsed = 0
-    @purged = 0
+    @debug = debug
+    if @debug
+      @groups = 0
+      @blobs  = 0
+      @parsed = 0
+      @purged = 0
+    end
     @parse = parse || []
     @purge = purge || []
     assemble_and_perform_queries
-    print(@parsed.to_s + " || " + @purged.to_s + " || " + @groups.to_s  + " || " + @blobs.to_s + "\n") if debug
+    print(@parsed.to_s + " <-Parsed Contracts || Purged Contracts-> " +
+      @purged.to_s + " || " + @groups.to_s  + " <-Groups || Blobs-> " +
+      @blobs.to_s + "\n") if @debug
   end
 
   private
 
     def assemble_and_perform_queries
+      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Starting a Tree Parse." if @debug
       until @parse.empty?
         get_the_contract @parse.shift
         @parse.uniq!
@@ -29,7 +35,7 @@ class TreeBuilder
     end
 
     def get_the_contract contract
-      @parsed += 1
+      @parsed += 1 if @debug
       if ab? contract
         get_ab_content contract
       elsif ba? contract
@@ -38,7 +44,7 @@ class TreeBuilder
     end
 
     def purge_the_contract contract
-      @purged += 1
+      @purged += 1 if @debug
       if ab? contract
         purge_ab_content contract
       elsif ba? contract
@@ -75,6 +81,7 @@ class TreeBuilder
       dm = send_query contract, '0x11'
       purge_the_blob dm
       ui = send_query contract, '0x12'
+      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Pushing #{ui} to Parse Stack." if @debug
       @purge.push ui
       group = {}
       group = send_query contract, '0x19'
@@ -88,13 +95,14 @@ class TreeBuilder
       if behav == ('0x01' || '0x1')
         return true
       elsif behav == ('0x05' || '0x5')
+        puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Pushing #{contract} to Purge Stack." if @debug
         @purge.push contract
       end
       return false
     end
 
     def get_the_group contract, group_id
-      @groups   += 1
+      @groups   += 1 if @debug
       this_group = {}
       if can_we_get_the_group? contract, group_id
         if does_the_group_have_blobs? contract, group_id
@@ -102,13 +110,13 @@ class TreeBuilder
         end
         this_group[:prev] = send_query(contract, prev_link_slot(group_id))
       else
-        this_group[:prev] = '0x30'
+        this_group[:prev] = send_query(contract, prev_link_slot(group_id))
       end
       return this_group
     end
 
     def purge_the_group contract, group_id
-      @groups   += 1
+      @groups   += 1 if @debug
       blob = send_query(contract, content_slot(group_id))
       purge_the_blob blob
       send_query(contract, prev_link_slot(group_id))
@@ -116,9 +124,10 @@ class TreeBuilder
 
     def can_we_get_the_group? contract, group_id
       behav = send_query(contract, behav_slot(group_id))
-      if behav == ('0x01' || '0x1')
+      if behav == ('0x01' || '0x1' || '0x')
         return true
       elsif behav == ('0x05' || '0x5')
+        puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Pushing #{group_id} to Purge Stack." if @debug
         @purge.push group_id
       end
       return false
@@ -127,9 +136,11 @@ class TreeBuilder
     def does_the_group_have_blobs? contract, group_id
       type = send_query(contract, type_slot(group_id))
       if type == '0x'
-        @parse.push group_id
+        puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Pushing #{group_id} to Parse Stack." if @debug
+        @parse.push send_query contract, group_id
         return false
       elsif type == ('0x01' || '0x1')
+        puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Pushing #{group_id} to Parse Stack." if @debug
         @parse.push group_id
         return true
       else
@@ -193,6 +204,7 @@ class TreeBuilder
 
     def get_ui_files contract
       contract = send_query contract, '0x12'
+      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Pushing #{contract} to Parse Stack." if @debug
       @parse.push contract
     end
 

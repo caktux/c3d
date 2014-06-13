@@ -41,7 +41,6 @@ module EyeOfZorax
         j = []
       end
       j = [] unless j
-      p j
       return j
     end
 
