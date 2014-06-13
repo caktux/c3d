@@ -2,7 +2,7 @@
 # based off of work by
 
 class PostToThread
-  attr_accessor :post_id
+  attr_accessor :post_id, :post_blob
 
   def initialize blob, post_to_thread_bylaw, thread_id
     if blob
@@ -31,6 +31,8 @@ class PostToThread
     def get_values thread_id
       sleep 0.1                # to make sure the client has received the tx and posted to state machine
       post_memory_position = $eth.get_storage_at thread_id, '0x19'
+      post_content_pos     = "0x" + ((post_memory_position.hex + 0x5).to_s(16))
       @post_id             = $eth.get_storage_at thread_id, post_memory_position
+      @post_blob           = $eth.get_storage_at thread_id, post_content_pos
     end
 end
