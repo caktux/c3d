@@ -2,16 +2,14 @@
 
 class TreeBuilder
   include Celluloid
-  attr_accessor :groups, :blobs, :parse, :purge
+  attr_accessor :groups, :blobs, :parsed, :purged
 
   def initialize parse=[], purge=[], debug=false
     @debug = debug
-    if @debug
-      @groups = 0
-      @blobs  = 0
-      @parsed = 0
-      @purged = 0
-    end
+    @groups = 0
+    @blobs  = 0
+    @parsed = 0
+    @purged = 0
     @parse = parse || []
     @purge = purge || []
     assemble_and_perform_queries
@@ -35,7 +33,7 @@ class TreeBuilder
     end
 
     def get_the_contract contract
-      @parsed += 1 if @debug
+      @parsed += 1
       if ab? contract
         get_ab_content contract
       elsif ba? contract
@@ -44,7 +42,7 @@ class TreeBuilder
     end
 
     def purge_the_contract contract
-      @purged += 1 if @debug
+      @purged += 1
       if ab? contract
         purge_ab_content contract
       elsif ba? contract
@@ -102,7 +100,7 @@ class TreeBuilder
     end
 
     def get_the_group contract, group_id
-      @groups   += 1 if @debug
+      @groups   += 1
       this_group = {}
       if can_we_get_the_group? contract, group_id
         if does_the_group_have_blobs? contract, group_id
@@ -116,7 +114,7 @@ class TreeBuilder
     end
 
     def purge_the_group contract, group_id
-      @groups   += 1 if @debug
+      @groups   += 1
       blob = send_query(contract, content_slot(group_id))
       purge_the_blob blob
       send_query(contract, prev_link_slot(group_id))
