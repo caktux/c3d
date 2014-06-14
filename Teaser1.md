@@ -181,7 +181,9 @@ Top Level Contract Storage Slots:
 
 ### C. API
 
-Users will experience the c3D/DOUG architecture through a simple user interface. As the platform evolves user experience will be made paramount, with the general idea being 
+Users will experience the c3D/DOUG architecture through a simple user interface. As the platform evolves user experience will be made paramount, with the general idea (and end goal) being that users should be able to use the platform without being able to tell the difference between it and, for example, Facebook or Reddit. 
+
+Unlike Facebook or Reddit, though, users will benefit from decentralisation and encryption and will be able to mount trustless peer-to-peer contracts.
 
 In principle, any agreement which is reducible to code is amenable to expression in this way; because they are standardised they can be replicated, allowing transaction-specific individual contracts to be generated. These contracts can be either standalone (and thus settled on a peer-to-peer basis) or by reference to DOUG (in the case of the consensus-gathering and Community-driven functions outlined more particularly below). Version 0.1 of the Project Douglas platform will incorporate the following factory functions:
 
