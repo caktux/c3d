@@ -2,13 +2,17 @@
 
 ### A. Objectives
 
-We intend to build and test the first decentralised autonomous organisation (**DAO**) which is incorporated into a legal entity’s governance structure. It is our intention for the DAO to serve as a technology demonstrator for a decentralised and consensus-based organisational governance, on a fully transparent and trustless basis, which to our knowledge has not yet been attempted. We furthermore intend to design the DAO in such a way that it is run in full compliance with legal and regulatory obligations. 
+We (Dennis McKinnon, Casey Kuhlman and Preston Byrne) have designed, are building and will shortly begin testing the world's first decentralised autonomous organisation (**DAO**) which is made to work with real-world obligations and which will be incorporated into a legal entity’s governance structure. 
 
-A DAO is an algorithmically-governed quasi-corporation or unincorporated association, operating itself in accordance with pre-defined rules and cryptographically secure architecture such that its users can rely that instructions which they broadcast to a DAO will consistently be executed in a reliable way. 
+We have designed and built it over the course of the last three weeks. 
 
-Viewed thus, Bitcoin itself is a DAO, albeit one currently capable of executing only one-way instructions. Until recently, DAOs capable of a higher degree of sophistication existed only in theory. More recent iterations require a high degree of technical aptitude to use - or to find relevant for use - and therefore have failed to capture the public imagination. 
+It is our intention for this DAO to serve as a technology demonstrator for a decentralised and consensus-based organisational governance, on a fully transparent and trustless basis, which to our knowledge has not yet been attempted. We furthermore intend to design the DAO in such a way that it is run in full compliance with legal and regulatory obligations. 
 
-We are intending to release version 0.1 (the Project Douglas software is as-yet unnamed) by 11:59 PM (Greenwich Time) on Monday, 16th of June, 2014. 
+A DAO is an algorithmically-governed programme that, in using trustless decentralised computing, can serve as a way to formalise multilateral relationships or transactions outside of traditional legal architecture (see the essay "Formalising and Securing Relationships on Public Networks" by Nick Szabo to learn more on the subject). In legal terms, a DAO is therefore a medium for two or more people to conclude agreements or otherwise associate with others in a predictable way. The fact that a DAO built on a blockchain operates itself in accordance with pre-defined rules and cryptographically secure architecture means that its users can reliably expect instructions which they broadcast to  be consistently and securely executed.
+
+Viewed thus, Bitcoin itself is a DAO, albeit a very early one capable of executing only the simplest one-way transactions. Until recently, DAOs capable of a higher degree of sophistication existed only in theory. 
+
+More recent iterations require a high degree of technical aptitude to use - or to find relevant for use - and therefore have failed to capture the public imagination. We hope to change that. We are intending to release version 0.1 (the Project Douglas software is, for the time being, unnamed) by 11:59 PM (Greenwich Time) on Monday, 16th of June, 2014. 
 
 ### B. Primary Use-Case
 
@@ -16,7 +20,7 @@ It is our belief that the proliferation of DAOs in user-friendly applications ha
 
 Where Bitcoin was designed to solve this problem in relation to point-of-sale and banking transactions, Project Douglas was conceived in order to solve this issue for internet-based communications and social networking - bearing in mind that free internet services and "big data" applications, intrusion into users' private lives is not merely a nuisance, but a  design imperative. 
 
-We will pair our DAO with a non-profit organisation, name TBD but currently being referred to as "the Association." The DAO will be a captive software platform of this nonprofit (and in this role, the specific DAO we have created will be known hereafter as the **ADAO**)
+We will pair our DAO with a non-profit organisation, name TBD but currently being referred to as "the Association." The DAO will be a captive software platform of this nonprofit (and in this role, the specific DAO we have created will be known hereafter as the **ADAO** where appropriate).
 
 The ADAO will initially be run on the Ethereum testnet, in relation to which the underlying units of testnet Ether presently are (and will likely forever be) completely valueless in exchange. However, the experience of Bitcoin has demonstrated powerfully that the enterprise value of decentralised networks operating on this basis can and does capitalise into the value of tokens they issue. We do not, therefore, think it unreasonable to expect that "2.0" platforms such as Ethereum or ones similar to it have the potential to thrive in a similar fashion, allowing the creation of free-of-charge services which incentivise privacy through their very design.
 
@@ -48,7 +52,7 @@ We also believe that the ADAO will be more effective as a representative and edu
 
 The Association may, at its discretion, grant individuals and organisations donating more than USD$25 or other cryptocurrency equivalent (Bitcoin, Dogecoin and Litecoin) access the ADAO. Higher levels of donation will not grant additional rights of access.  If Ether is used as the method of payment, the grant of access will be wholly automated. Donation through any other means will be routed through a trusted silo.
 
-The Association will, furthermore, have a number of discretionary powers in relation to the DAO which we have coded for.
+The Association will, furthermore, have a number of discretionary powers to intervene in the DAO's activities, but these will be limited. We will release details of this functionality when we release version 0.1.  
 
 ## 4. Platform architecture
 
@@ -183,9 +187,11 @@ Top Level Contract Storage Slots:
 
 Users will experience the c3D/DOUG architecture through a simple user interface. As the platform evolves user experience will be made paramount, with the general idea (and end goal) being that users should be able to use the platform without being able to tell the difference between it and, for example, Facebook or Reddit. 
 
-Unlike Facebook or Reddit, though, users will benefit from decentralisation and encryption and will be able to mount trustless peer-to-peer contracts.
+Unlike Facebook or Reddit, though, users will benefit from decentralisation and encryption and will be able to mount trustless peer-to-peer contracts. Flexibility has been built-in so the users can trustlessly vote on and add new features to the DAO provided that sufficient majority thresholds of active users so decide. 
 
-In principle, any agreement which is reducible to code is amenable to expression in this way; because they are standardised they can be replicated, allowing transaction-specific individual contracts to be generated. These contracts can be either standalone (and thus settled on a peer-to-peer basis) or by reference to DOUG (in the case of the consensus-gathering and Community-driven functions outlined more particularly below). Version 0.1 of the Project Douglas platform will incorporate the following factory functions:
+In principle, any agreement which is reducible to code is amenable to expression through a DAO; we aim to standardise the process of smart contract generation so they can be replicated in different contexts and for different uses with relatively little effort, technical knowledge or cost.These contracts can be either standalone (and thus settled on a peer-to-peer basis) or by reference to DOUG (in the case of the consensus-gathering and Community-driven functions outlined more particularly below). 
+
+Version 0.1 of the Project Douglas platform will incorporate the following factory functions:
 
 1. Thread Factories (will allow the creation of threads on the decentralised forums);
 2. Topic Factories; and
