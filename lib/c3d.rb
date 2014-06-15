@@ -10,6 +10,7 @@ require 'uri'
 
 # Gem Dependencies
 require 'httparty'
+require 'bencode'
 require 'celluloid/autostart'
 
 # This Gem

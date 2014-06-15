@@ -22,7 +22,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency             'httparty', '~> 0.13'
   s.add_dependency             'celluloid', '~> 0.15'
-  s.add_dependency             'commander', '~> 4.1.6'
+  s.add_dependency             'commander', '~> 4.1'
+  s.add_dependency             'bencode', '~> 0.8'
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'epm'
 

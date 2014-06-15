@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 
 module C3D
-  extend self
-
   class SetupC3D
     include Celluloid
 

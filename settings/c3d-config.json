@@ -8,8 +8,9 @@
   "torrent_pass": "password",
   "ui_respond": "tcp://127.0.0.1:31314",
   "ui_announce": "tcp://127.0.0.1:31316",
+  "path-to-eth": "/opt/cpp-ethereum/build/eth/eth",
+  "path-to-lllc": "/opt/cpp-ethereum/build/lllc/lllc",
   "eth_connector": "rpc",
-  "eth_zmq_addr": "tcp://127.0.0.1:31315",
   "eth_rpc_host": "localhost",
   "eth_rpc_port": "9090",
   "eth_remote":"54.201.28.117",
@@ -22,5 +23,5 @@
   "download-queue-size": "50",
   "queue-stalled-minutes": "98",
   "primary_account":"{{0xACCT}}",
-  "primary_account_key":"{{0xSEC}}"
+  "primary_account_key":"{{0xSEC}}",
 }

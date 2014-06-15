@@ -13,7 +13,12 @@ module C3D
 
     def is_trans_running?
       a = `ps ux`.split("\n").select{|e| e[/transmission-daemon/]}
-      return (! a.empty?)
+      b = `ps ux`.split("\n").select{|e| e[/transmission-daemon -f --no-incomplete-dir -o -C -p /]}
+      if ! a.empty? and b.empty?
+        p "Please stop your default Transmission Server with `sudo service transmission-daemon stop` and then restart."
+        exit 0
+      end
+      return (! b.empty?)
     end
   end
 
