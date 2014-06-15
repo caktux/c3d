@@ -37,6 +37,7 @@ module C3D
     $eth    = Celluloid::Actor[:eth]
 
     C3D::Utility.save_key
+    sleep
   end
 
   def stop
