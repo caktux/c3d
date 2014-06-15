@@ -22,6 +22,8 @@ class RemoveFlag
       post_present         = $eth.get_storage_at flag_list_top, post_id
       if post_present == '0x'
         @removed = true
+      else
+        @removed = false
       end
     end
 end

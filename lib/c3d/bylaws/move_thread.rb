@@ -21,9 +21,9 @@ class MoveThread
       sleep 0.1                # to make sure the client has received the tx and posted to state machine
       post_position    = $eth.get_storage_at target_topic_id, '0x19'
       if post_position == thread_id
-        @added = true
+        @moved = true
       else
-        @added = false
+        @moved = false
       end
       @topic_id = $eth.get_storage_at thread_id, '0x14'
     end

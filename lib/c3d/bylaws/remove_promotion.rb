@@ -22,6 +22,8 @@ class RemovePromoted
       post_present         = $eth.get_storage_at promote_list_top, post_id
       if post_present == '0x'
         @removed = true
+      else
+        @removed = false
       end
     end
 end

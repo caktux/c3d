@@ -68,6 +68,17 @@ describe "Publishing Content from c3D to Ethereum" do
     expect( fp3.added ).to be_truthy
   end
 
+  it "should change the status of individual posts." do
+    print "\n\nChecking status of Flagged Posts.\n\n"
+    status_fp1 = $eth.get_storage_at @multiple_post_ids[0], '0x21'
+    status_fp2 = $eth.get_storage_at @multiple_post_ids[1], '0x21'
+    status_fp3 = $eth.get_storage_at @multiple_post_ids[2], '0x21'
+    print "\n"
+    expect( status_fp1 ).to eq('0x01')
+    expect( status_fp2 ).to eq('0x01')
+    expect( status_fp3 ).to eq('0x01')
+  end
+
   it "should be able to remove flagged posts." do
     print "\n\nRemoving a Flag.\n\n"
     rp      = RemoveFlag.new @multiple_post_ids[0], @rm_fl_bl, @flaglist
@@ -93,7 +104,7 @@ describe "Publishing Content from c3D to Ethereum" do
 
   it "should be able to blacklist promoted posts." do
     print "\n\nBlacklisting a Promoted Post.\n\n"
-    bp      = BlacklistPost.new @multiple_post_ids[2], @prom_bl, @blacklst
+    bp      = BlacklistPost.new @multiple_post_ids[2], @black_bl, @blacklst
     print "\n"
     expect( bp.added ).to be_truthy
   end
