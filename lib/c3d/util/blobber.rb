@@ -5,7 +5,7 @@
 module C3D
   class Blobber
     include Celluloid
-    attr_accessor :tor_file, :blob_file, :sha1_trun, :btih
+    attr_accessor :tor_file, :blob_file, :sha1_trun, :btih, :mag_link
 
     def initialize blob
       @piecelength = 32 * 1024
@@ -20,6 +20,9 @@ module C3D
     private
 
       def prepare blob
+        if File.exists? blob
+          blob = File.read blob
+        end
         sha1_full = Digest::SHA1.hexdigest blob
         @sha1_trun = sha1_full[0..23]
         @tor_file  = File.join(ENV['TORRENTS_DIR'], "#{sha1_trun}.torrent")
@@ -77,8 +80,8 @@ module C3D
         rescue
           @btih     = torrent["torrent-duplicate"]['hashString']
         end
-        mag_link = "magnet:?xt=urn:btih:" + @btih + "&dn=" + @sha1_trun
-        puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Magnet Link >>\t\t" + mag_link
+        @mag_link = "magnet:?xt=urn:btih:" + @btih + "&dn=" + @sha1_trun
+        puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Magnet Link >>\t\t" + @mag_link
       end
   end
 end

@@ -49,6 +49,19 @@ module C3D
     C3D.start
   end
 
+  def blob args
+    C3D::SetupC3D.new
+    opts = { username: ENV['TORRENT_USER'],
+        password: ENV['TORRENT_PASS'],
+        url:      ENV['TORRENT_RPC'] }
+    $puller = C3D::ConnectTorrent.new opts
+    until args.empty?
+      file = args.shift
+      c = C3D::Blobber.new file
+      print "The magnet link for the file is: #{c.mag_link}\n"
+    end
+  end
+
   def version
     return VERSION
   end

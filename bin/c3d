@@ -38,3 +38,13 @@ command :restart do |c|
     print "Server has been restarted.\n"
   end
 end
+
+
+command :blob do |c|
+  c.syntax = 'c3d blob'
+  c.summary = ''
+  c.description = 'Blob a file and throw into the default torrent client.'
+  c.action do |args|
+    mag_link = C3D.blob args
+  end
+end
