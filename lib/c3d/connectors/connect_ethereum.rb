@@ -1,9 +1,5 @@
 #!/usr/bin/env ruby
 
-# Transactions:
-#   * `add-blob-to-g`:  add blob to group (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-#   * `rm-blob-from-g`: remove blob from contract (params: blob: "BLOB_ID", contract: "CONTRACT_ADDRESS", group: "GROUP_ID") (returns success: true or error)
-
 module C3D
   class ConnectEth
     include Celluloid

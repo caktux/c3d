@@ -23,5 +23,5 @@
   "download-queue-size": "50",
   "queue-stalled-minutes": "98",
   "primary_account":"{{0xACCT}}",
-  "primary_account_key":"{{0xSEC}}",
+  "primary_account_key":"{{0xSEC}}"
 }

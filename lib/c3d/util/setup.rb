@@ -31,10 +31,10 @@ module C3D
         end
         print "Before we begin, I need to ask you two personal questions:\n"
         print "What is your primary account which I should be using to send transactions?\n\n"
-        account = gets.chomp
+        account = STDIN.gets.chomp
         print "Thanks. #{account} is what I will use.\n"
         print "Thanks. Now what is the private key for that account which I should be using?\n\n"
-        secret = gets.chomp
+        secret = STDIN.gets.chomp
         print "Thanks. #{secret} is what I will use.\n"
         account = "0x#{account}" if account[0..1] != '0x'
         secret = "0x#{secret}" if secret[0..1] != '0x'

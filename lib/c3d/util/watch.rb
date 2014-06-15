@@ -1,11 +1,5 @@
 #!/usr/bin/env ruby
 
-# Queries:
-#   * `subscribe-k`:    add a contract's blobs to the subscribed list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
-#   * `unsubscribe-k`   remove a contract's blobs from the subscribed list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
-#   * `ignore-k`        add a contract's blobs to the ignore list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
-#   * `unignore-k`      remove a contract's blobs from the ignore list (params: contract: "CONTRACT_ADDRESS") (returns success: true or error)
-
 module C3D
   module EyeOfZorax
     extend self

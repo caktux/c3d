@@ -12,7 +12,7 @@ module C3D
       dn      = blob_id[40..-1]
       mag_link = "magnet:?xt=urn:btih:" + btih + "&dn=" + dn
       $puller.create mag_link
-      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Getting >>\t\t" + mag_link
+      puts "[C3D::#{Time.now.strftime( "%F %T" )}] Getting >>\t\t" + mag_link
     end
   end
 end

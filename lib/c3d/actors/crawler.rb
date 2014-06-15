@@ -5,8 +5,10 @@ module C3D
     include Celluloid
 
     def initialize contract
+      puts "[C3D::#{Time.now.strftime( "%F %T" )}] Finding Peak of >>\t" + contract
       @parse = find_the_peak contract
       @purge = []
+      puts "[C3D::#{Time.now.strftime( "%F %T" )}] Parsing Tree >>\t\t" + @parse
       C3D::TreeBuilder.new @parse, @purge
     end
 

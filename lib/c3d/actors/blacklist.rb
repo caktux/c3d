@@ -6,6 +6,7 @@ module C3D
 
     def initialize contract
       contract = Array(contract)
+      puts "[C3D::#{Time.now.strftime( "%F %T" )}] Running Blacklist."
       C3D::TreeBuilder.new [], contract
     end
   end
