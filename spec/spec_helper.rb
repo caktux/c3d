@@ -16,15 +16,15 @@ RSpec.configure do |config|
 end
 
 def get_set_up
-  SetupC3D.new
+  C3D::SetupC3D.new
 
-  ConnectTorrent.supervise_as :puller, {
+  C3D::ConnectTorrent.supervise_as :puller, {
       username: ENV['TORRENT_USER'],
       password: ENV['TORRENT_PASS'],
       url:      ENV['TORRENT_RPC'] }
   $puller           = Celluloid::Actor[:puller]
 
-  ConnectEth.supervise_as :eth, :cpp
+  C3D::ConnectEth.supervise_as :eth, :cpp
   $eth              = Celluloid::Actor[:eth]
 
   unless check_for_doug

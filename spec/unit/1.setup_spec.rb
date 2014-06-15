@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe "Setting Up c3D" do
 
-  describe SetupC3D, "running Setup Sequence" do
+  describe C3D::SetupC3D, "running Setup Sequence" do
     it "should set the environment variables." do
       expect(ENV['SWARM_DIR']).to be
       expect(ENV['TORRENTS_DIR']).to be

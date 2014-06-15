@@ -59,9 +59,9 @@ describe "Publishing Content from c3D to Ethereum" do
 
   it "should be able to flag posts." do
     print "\n\nFirst Round of Checks Done. Flagging three Posts.\n\n"
-    fp1     = FlagPost.new @multiple_post_ids[0], @flag_bl, @flaglist
-    fp2     = FlagPost.new @multiple_post_ids[1], @flag_bl, @flaglist
-    fp3     = FlagPost.new @multiple_post_ids[2], @flag_bl, @flaglist
+    fp1     = C3D::FlagPost.new @multiple_post_ids[0], @flag_bl, @flaglist
+    fp2     = C3D::FlagPost.new @multiple_post_ids[1], @flag_bl, @flaglist
+    fp3     = C3D::FlagPost.new @multiple_post_ids[2], @flag_bl, @flaglist
     print "\n"
     expect( fp1.added ).to be_truthy
     expect( fp2.added ).to be_truthy
@@ -81,15 +81,15 @@ describe "Publishing Content from c3D to Ethereum" do
 
   it "should be able to remove flagged posts." do
     print "\n\nRemoving a Flag.\n\n"
-    rp      = RemoveFlag.new @multiple_post_ids[0], @rm_fl_bl, @flaglist
+    rp      = C3D::RemoveFlag.new @multiple_post_ids[0], @rm_fl_bl, @flaglist
     print "\n"
     expect( rp.removed ).to be_truthy
   end
 
   it "should be able to promote flagged posts." do
     print "\n\nPromoting a Flagged Post.\n\n"
-    pp1     = PromotePost.new @multiple_post_ids[1], @prom_bl, @promlist
-    pp2     = PromotePost.new @multiple_post_ids[2], @prom_bl, @promlist
+    pp1     = C3D::PromotePost.new @multiple_post_ids[1], @prom_bl, @promlist
+    pp2     = C3D::PromotePost.new @multiple_post_ids[2], @prom_bl, @promlist
     print "\n"
     expect( pp1.added ).to be_truthy
     expect( pp2.added ).to be_truthy
@@ -97,21 +97,21 @@ describe "Publishing Content from c3D to Ethereum" do
 
   it "should be able to remove promoted posts." do
     print "\n\nRemoving a Promoted Post.\n\n"
-    rp      = RemovePromoted.new @multiple_post_ids[1], @rm_pr_bl, @promlist
+    rp      = C3D::RemovePromoted.new @multiple_post_ids[1], @rm_pr_bl, @promlist
     print "\n"
     expect( rp.removed ).to be_truthy
   end
 
   it "should be able to blacklist promoted posts." do
     print "\n\nBlacklisting a Promoted Post.\n\n"
-    bp      = BlacklistPost.new @multiple_post_ids[2], @black_bl, @blacklst
+    bp      = C3D::BlacklistPost.new @multiple_post_ids[2], @black_bl, @blacklst
     print "\n"
     expect( bp.added ).to be_truthy
   end
 
   it "should be able to move threads between topics." do
     print "\n\nMoving a Thread between Topics.\n\n"
-    mv      = MoveThread.new @thread.thread_id, get_another_topic, @m_thr_bl
+    mv      = C3D::MoveThread.new @thread.thread_id, get_another_topic, @m_thr_bl
     print "\n"
     expect( mv.moved ).to be_truthy
     expect( mv.topic_id ).to_not eq( @topic.topic_id )
@@ -119,7 +119,7 @@ describe "Publishing Content from c3D to Ethereum" do
 
   it "should be able to up vote posts." do
     print "\n\nSubmitting an Upvote.\n\n"
-    uvp     = VotePost.new @post.post_id, 'upvote', @vote_bl
+    uvp     = C3D::VotePost.new @post.post_id, 'upvote', @vote_bl
     print "\n"
     # for now I'm not sure which position to check.
     expect( false ).to be_truthy
@@ -127,19 +127,26 @@ describe "Publishing Content from c3D to Ethereum" do
 
   it "should be able to down vote posts." do
     print "\n\nSubmitting a Downvote.\n\n"
-    dvp     = VotePost.new @post.post_id, 'downvote', @vote_bl
+    dvp     = C3D::VotePost.new @post.post_id, 'downvote', @vote_bl
     print "\n"
     # for now I'm not sure which position to check.
     expect( false ).to be_truthy
   end
+
+  # if ARGV[0] == 'third'
+  #   TreeBuilder.new [doug], [], true
+  # end
+
+  # EyeOfZorax.subscribe doug
+
 end
 
 def original_push
   before_orig_push_helper
-  @topic    = CreateTopic.new  make_test_file, @c_top_bl, @swarum
-  @thread   = CreateThread.new make_test_file, @c_thr_bl, @topic.topic_id
+  @topic    = C3D::CreateTopic.new  make_test_file, @c_top_bl, @swarum
+  @thread   = C3D::CreateThread.new make_test_file, @c_thr_bl, @topic.topic_id
   p @thread.thread_id
-  @post     = PostToThread.new make_test_file, @c_pos_bl, @thread.thread_id
+  @post     = C3D::PostToThread.new make_test_file, @c_pos_bl, @thread.thread_id
   after_orig_push_helper
 end
 
@@ -147,7 +154,7 @@ def multiples_push
   @multiple_post_ids = []
   @multiple_post_blb = []
   3.times do
-    post               = PostToThread.new make_test_file, @c_pos_bl, @thread.thread_id
+    post               = C3D::PostToThread.new make_test_file, @c_pos_bl, @thread.thread_id
     @multiple_post_ids << post.post_id
     @multiple_post_blb << post.post_blob[42..-1]
   end
@@ -215,13 +222,13 @@ end
 def remove_flag
   print "\nFirst Round of Checks Done. Flagging a Post.\n\n"
   post_id = @multiple_post_ids[0]
-  fp = FlagPost.new post_id, @flag_bl, @flaglist
+  fp = C3D::FlagPost.new post_id, @flag_bl, @flaglist
   return fp.added
 end
 
 def promote_post
   print "\nFlagged the Post. Now Promoting it for review.\n\n"
   post_id = @multiple_post_ids[0]
-  fp = FlagPost.new post_id, @flag_bl, @flaglist
+  fp = C3D::FlagPost.new post_id, @flag_bl, @flaglist
   return fp.added
 end

@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+require File.join(File.dirname(__FILE__), '..', 'lib', 'c3d.rb')
+require 'commander/import'
+
+program :version, C3D.version
+program :description, 'Contract Controlled Content Dissemination Server.'
+
+##
+## Package Workflow Commands
+##
+command :start do |c|
+  c.syntax = 'c3d start'
+  c.description = 'Start your default c3d server.'
+  c.action do
+    print "Please be patient, this will take a few seconds.\n"
+    C3D.start
+    print "Server has started.\n"
+  end
+end
+
+command :stop do |c|
+  c.syntax = 'c3d stop'
+  c.description = 'Stop your default c3d server.'
+  c.action do
+    C3D.stop
+    print "Server has stopped.\n"
+  end
+end
+
+command :restart do |c|
+  c.syntax = 'c3d restart'
+  c.summary = ''
+  c.description = 'Restart your default c3d server.'
+  c.action do
+    print "Please be patient, this will take a few seconds.\n"
+    C3D.restart
+    print "Server has been restarted.\n"
+  end
+end

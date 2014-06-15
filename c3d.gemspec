@@ -20,10 +20,9 @@ Gem::Specification.new do |s|
   s.test_files        = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths     = ["lib"]
 
-  s.add_runtime_dependency 'httparty', '~> 0.13'
-  s.add_runtime_dependency 'bencode', '~> 0.8'
-  s.add_runtime_dependency 'celluloid', '~> 0.15'
-  s.add_runtime_dependency 'celluloid-zmq', '~> 0.15'
+  s.add_dependency             'httparty', '~> 0.13'
+  s.add_dependency             'celluloid', '~> 0.15'
+  s.add_dependency             'commander', '~> 4.1.6'
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'epm'
 

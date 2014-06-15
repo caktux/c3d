@@ -2,37 +2,20 @@ PATH
   remote: .
   specs:
     c3d (0.3.5)
-      bencode (~> 0.8)
       celluloid (~> 0.15)
-      celluloid-zmq (~> 0.15)
+      commander (~> 4.1.6)
       httparty (~> 0.13)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    bencode (0.8.1)
     celluloid (0.15.2)
       timers (~> 1.1.0)
-    celluloid-zmq (0.15.0)
-      celluloid (>= 0.13.0)
-      ffi
-      ffi-rzmq
     commander (4.1.6)
       highline (~> 1.6.11)
     diff-lcs (1.2.5)
-    dotenv (0.11.1)
-      dotenv-deployment (~> 0.0.2)
-    dotenv-deployment (0.0.2)
     epm (0.3.7)
       commander (~> 4.1.6)
-    ffi (1.9.3)
-    ffi-rzmq (2.0.1)
-      ffi-rzmq-core (>= 1.0.1)
-    ffi-rzmq-core (1.0.3)
-      ffi (~> 1.9)
-    foreman (0.71.0)
-      dotenv (~> 0.11.1)
-      thor (~> 0.19.1)
     highline (1.6.21)
     httparty (0.13.1)
       json (~> 1.8)
@@ -51,18 +34,12 @@ GEM
     rspec-mocks (3.0.1)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.0)
-    thor (0.19.1)
     timers (1.1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  bencode (~> 0.8)
   c3d!
-  celluloid (~> 0.15)
-  celluloid-zmq (~> 0.15)
   epm
-  foreman
-  httparty (~> 0.13)
-  rspec (~> 3.0.0)
+  rspec (~> 3.0)
