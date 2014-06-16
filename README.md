@@ -2,6 +2,8 @@
 
 C3D => Contract Controlled Content Distribution
 
+More coming.
+
 ## Contributing
 
 1. Fork the repository.
