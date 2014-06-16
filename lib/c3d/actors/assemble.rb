@@ -139,6 +139,7 @@ module C3D
 
       def address_guard contract
         contract = "0x#{contract}" unless contract[0..1] == '0x'
+        contract
       end
   end
 end
