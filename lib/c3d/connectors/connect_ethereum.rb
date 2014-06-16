@@ -11,7 +11,7 @@ module C3D
       @request = Net::HTTP::Post.new @uri.request_uri
       @request.content_type = 'application/json'
       @last_push = Time.now
-      puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] c3D->eth via RPC on port >>\t#{ENV['ETH_PORT']}"
+      puts "[C3D::#{Time.now.strftime( "%F %T" )}] c3D->eth via RPC on port >>\t#{ENV['ETH_PORT']}"
     end
 
     def get_storage_at address, storage_location
@@ -129,16 +129,16 @@ module C3D
 
       def send_command request
         @request.body = request.to_json
-        puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Sending Question >>\t#{@request.body}"
+        puts "[C3D::#{Time.now.strftime( "%F %T" )}] Sending Question >>\t#{@request.body}"
         handle_response JSON.parse(@question_socket.request(@request).body)
       end
 
       def handle_response response
         unless response["error"]
-          puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Received Answer >>\tanswer:#{response['result']}"
+          puts "[C3D::#{Time.now.strftime( "%F %T" )}] Received Answer >>\tanswer:#{response['result']}"
           return response["result"]
         else
-          puts "[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Received Answer >>\tERROR!"
+          puts "[C3D::#{Time.now.strftime( "%F %T" )}] Received Answer >>\tERROR!"
           return nil
         end
       end

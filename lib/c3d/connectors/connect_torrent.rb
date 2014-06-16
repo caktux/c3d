@@ -23,7 +23,7 @@ module C3D
     end
 
     def all
-      log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Getting All Torrents"), true
+      log ("[C3D::#{Time.now.strftime( "%F %T" )}] Getting All Torrents"), true
 
       response =
         post(
@@ -37,7 +37,7 @@ module C3D
     end
 
     def find id
-      log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Getting Torrent ID >> "+ "#{id}"), true
+      log ("[C3D::#{Time.now.strftime( "%F %T" )}] Getting Torrent ID >> "+ "#{id}"), true
 
       response =
         post(
@@ -52,7 +52,7 @@ module C3D
     end
 
     def create filename
-      log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Adding Blob >>\t\t"+ "#{filename}"), true
+      log ("[C3D::#{Time.now.strftime( "%F %T" )}] Adding Blob >>\t\t"+ "#{filename}"), true
 
       response =
         post(
@@ -68,7 +68,7 @@ module C3D
     end
 
     def destroy id
-      log ("[C3D-EPM::#{Time.now.strftime( "%F %T" )}] Remove Torrent ID >> "+ "#{id}"), true
+      log ("[C3D::#{Time.now.strftime( "%F %T" )}] Remove Torrent ID >> "+ "#{id}"), true
 
       response =
         post(
